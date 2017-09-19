@@ -32,7 +32,7 @@ public class WeatherSummary {
     }
 
     public byte[] getIcon() {
-        return icon;
+        return icon.clone();
     }
 
     public String getHumidity() {
@@ -81,7 +81,7 @@ public class WeatherSummary {
         }
 
         public Builder setIcon(byte[] icon) {
-            this.icon = icon;
+            this.icon = icon.clone();
             return this;
         }
 

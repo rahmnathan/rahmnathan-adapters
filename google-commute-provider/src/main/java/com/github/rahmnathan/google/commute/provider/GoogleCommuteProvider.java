@@ -1,14 +1,9 @@
 package com.github.rahmnathan.google.commute.provider;
 
 import com.github.rahmnathan.commute.provider.CommuteProvider;
+import com.github.rahmnathan.http.control.HttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.logging.Logger;
 
 public class GoogleCommuteProvider implements CommuteProvider {
@@ -22,27 +17,8 @@ public class GoogleCommuteProvider implements CommuteProvider {
         String uri = "https://maps.googleapis.com/maps/api/directions/json?origin=" + startLocation +
                 "&destination=" + endLocation + "&key=" + key;
 
-        HttpURLConnection connection = null;
-        try {
-            connection = (HttpURLConnection) new URL(uri).openConnection();
-        } catch (IOException e){
-            logger.severe(e.toString());
-        }
-
-        if(connection != null) {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                StringBuilder response = new StringBuilder();
-                reader.lines().forEachOrdered(response::append);
-
-                return new JSONObject(response);
-            } catch (IOException e) {
-                logger.severe(e.toString());
-            } finally {
-                connection.disconnect();
-            }
-        }
-
-        return new JSONObject();
+        String response = HttpClient.getResponseAsString(uri);
+        return new JSONObject(response);
     }
 
     private String getTime(JSONObject jsonObject){

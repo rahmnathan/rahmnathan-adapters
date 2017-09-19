@@ -23,6 +23,10 @@
             <artifactId>json</artifactId>
             <version>20170516</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.rahmnathan.utils</groupId>
+            <artifactId>http-client</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

@@ -22,7 +22,7 @@ public class CurrentWeather {
     }
 
     public byte[] getIcon() {
-        return icon;
+        return icon.clone();
     }
 
     public String getSky() {
@@ -88,7 +88,7 @@ public class CurrentWeather {
             return this;
         }
         public Builder icon(byte[] icon){
-            this.icon = icon;
+            this.icon = icon.clone();
             return this;
         }
         public CurrentWeather build(){
