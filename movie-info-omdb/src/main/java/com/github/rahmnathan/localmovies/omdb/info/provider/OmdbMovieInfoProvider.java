@@ -1,12 +1,10 @@
 package com.github.rahmnathan.localmovies.omdb.info.provider;
 
-import com.github.rahmnathan.localmovies.movieinfoapi.MovieInfo;
-import com.github.rahmnathan.localmovies.movieinfoapi.IMovieInfoProvider;
+import com.github.rahmnathan.movie.info.api.IMovieInfoProvider;
+import com.github.rahmnathan.movie.info.data.MovieInfo;
 import org.imgscalr.Scalr;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,15 +14,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-@Component
 public class OmdbMovieInfoProvider implements IMovieInfoProvider {
     private final OmdbRawDataProvider dataProvider;
-    private final MovieInfoMapper movieInfoMapper;
+    private final MovieInfoMapper movieInfoMapper = new MovieInfoMapper();
 
-    @Autowired
-    public OmdbMovieInfoProvider(OmdbRawDataProvider dataProvider, MovieInfoMapper movieInfoBuilder){
-        this.dataProvider = dataProvider;
-        this.movieInfoMapper = movieInfoBuilder;
+    public OmdbMovieInfoProvider(String apiKey){
+        this.dataProvider = new OmdbRawDataProvider(apiKey);
     }
 
     @Override

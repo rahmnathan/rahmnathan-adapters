@@ -3,8 +3,6 @@ package com.github.rahmnathan.localmovies.omdb.info.provider;
 import com.github.rahmnathan.http.control.HttpClient;
 import com.google.common.io.ByteStreams;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.URL;
@@ -12,12 +10,13 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
-@Component
-class OmdbRawDataProvider {
-
-    @Value("${omdb.api.key}")
-    private String apiKey;
+public class OmdbRawDataProvider {
     private final Logger logger = Logger.getLogger(OmdbRawDataProvider.class.getName());
+    private final String apiKey;
+
+    public OmdbRawDataProvider(String apiKey){
+        this.apiKey = apiKey;
+    }
 
     JSONObject loadMovieInfo(String title) {
         String response = "";

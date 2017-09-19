@@ -1,12 +1,10 @@
 package com.github.rahmnathan.localmovies.omdb.info.provider;
 
-import com.github.rahmnathan.localmovies.movieinfoapi.MovieInfo;
+import com.github.rahmnathan.movie.info.data.MovieInfo;
 import org.json.JSONObject;
-import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 
-@Component
 class MovieInfoMapper {
 
     MovieInfo jsonToMovieInfo(JSONObject jsonObject, byte[] poster, String title){
