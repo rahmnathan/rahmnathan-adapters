@@ -1,6 +1,8 @@
 package com.github.rahmnathan.movie.info.data;
 
-public class MovieInfo {
+import java.io.Serializable;
+
+public class MovieInfo implements Serializable {
 
     private String image;
     private String title;
