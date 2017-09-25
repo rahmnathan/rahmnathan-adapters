@@ -8,14 +8,20 @@ import java.util.logging.Logger;
 
 public class GoogleCommuteProvider implements CommuteProvider {
     private final Logger logger = Logger.getLogger(GoogleCommuteProvider.class.getName());
+    private final String apiKey;
 
-    public String getCommuteTime(String startLocation, String endLocation, String key){
-        return getTime(getCommuteContent(startLocation, endLocation, key));
+    public GoogleCommuteProvider(String apiKey) {
+        this.apiKey = apiKey;
     }
 
-    private JSONObject getCommuteContent(String startLocation, String endLocation, String key){
+    public String getCommuteTime(String startLocation, String endLocation){
+        JSONObject jsonCommute = getCommuteContent(startLocation, endLocation);
+        return getTime(jsonCommute);
+    }
+
+    private JSONObject getCommuteContent(String startLocation, String endLocation){
         String uri = "https://maps.googleapis.com/maps/api/directions/json?origin=" + startLocation +
-                "&destination=" + endLocation + "&key=" + key;
+                "&destination=" + endLocation + "&key=" + apiKey;
 
         String response = HttpClient.getResponseAsString(uri);
         return new JSONObject(response);
