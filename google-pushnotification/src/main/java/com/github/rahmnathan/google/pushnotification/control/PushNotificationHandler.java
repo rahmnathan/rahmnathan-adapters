@@ -27,6 +27,7 @@ public class PushNotificationHandler {
 
         try {
             String pushNotificationJson = objectMapper.writeValueAsString(pushNotification);
+            headers.put("Content-Length", String.valueOf(pushNotificationJson.getBytes().length));
 
             String response = HttpClient.getResponseAsString(url, HttpRequestMethod.POST, pushNotificationJson, headers);
             logger.info("PushNotification sent - " + response);
