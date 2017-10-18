@@ -21,6 +21,7 @@
         <module>open-weather-map-weather-provider</module>
         <module>movie-info-api</module>
         <module>movie-info-omdb</module>
+        <module>google-pushnotification</module>
     </modules>
 
     <dependencyManagement>

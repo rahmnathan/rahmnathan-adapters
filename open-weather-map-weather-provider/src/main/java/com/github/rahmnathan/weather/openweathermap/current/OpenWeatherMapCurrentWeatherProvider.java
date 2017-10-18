@@ -1,6 +1,7 @@
 package com.github.rahmnathan.weather.openweathermap.current;
 
 import com.github.rahmnathan.http.control.HttpClient;
+import com.github.rahmnathan.http.data.HttpRequestMethod;
 import com.github.rahmnathan.weather.current.CurrentWeather;
 import com.github.rahmnathan.weather.current.CurrentWeatherProvider;
 import org.json.JSONArray;
@@ -41,6 +42,6 @@ public class OpenWeatherMapCurrentWeatherProvider implements CurrentWeatherProvi
 
     private JSONObject getContent(int zipCode){
         String url = "http://api.openweathermap.org/data/2.5/weather?zip=" + zipCode + "&units=imperial&appid=" + apiKey;
-        return new JSONObject(HttpClient.getResponseAsString(url));
+        return new JSONObject(HttpClient.getResponseAsString(url, HttpRequestMethod.GET, null, null));
     }
 }

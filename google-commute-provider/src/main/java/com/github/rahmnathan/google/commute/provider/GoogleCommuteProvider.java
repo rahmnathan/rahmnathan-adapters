@@ -2,6 +2,7 @@ package com.github.rahmnathan.google.commute.provider;
 
 import com.github.rahmnathan.commute.provider.CommuteProvider;
 import com.github.rahmnathan.http.control.HttpClient;
+import com.github.rahmnathan.http.data.HttpRequestMethod;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.logging.Logger;
@@ -23,7 +24,7 @@ public class GoogleCommuteProvider implements CommuteProvider {
         String uri = "https://maps.googleapis.com/maps/api/directions/json?origin=" + startLocation +
                 "&destination=" + endLocation + "&key=" + apiKey;
 
-        String response = HttpClient.getResponseAsString(uri);
+        String response = HttpClient.getResponseAsString(uri, HttpRequestMethod.GET, null, null);
         return new JSONObject(response);
     }
 

@@ -1,6 +1,7 @@
 package com.github.rahmnathan.localmovies.omdb.info.provider;
 
 import com.github.rahmnathan.http.control.HttpClient;
+import com.github.rahmnathan.http.data.HttpRequestMethod;
 import com.google.common.io.ByteStreams;
 import org.json.JSONObject;
 
@@ -24,7 +25,7 @@ public class OmdbRawDataProvider {
             String url = "http://www.omdbapi.com/?t=" + URLEncoder.encode(title, StandardCharsets.UTF_8.name()) + "&apikey=" + apiKey;
             logger.info("Loading MovieInfo from OMDB - " + url);
 
-            response = HttpClient.getResponseAsString(url);
+            response = HttpClient.getResponseAsString(url, HttpRequestMethod.GET, null, null);
         } catch (UnsupportedEncodingException e){
             logger.severe(e.toString());
         }

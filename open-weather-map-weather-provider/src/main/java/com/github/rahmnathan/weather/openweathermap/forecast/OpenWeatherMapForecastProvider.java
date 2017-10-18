@@ -1,6 +1,7 @@
 package com.github.rahmnathan.weather.openweathermap.forecast;
 
 import com.github.rahmnathan.http.control.HttpClient;
+import com.github.rahmnathan.http.data.HttpRequestMethod;
 import com.github.rahmnathan.weather.forecast.WeatherForecastProvider;
 import com.github.rahmnathan.weather.forecast.WeatherSummary;
 import org.json.JSONArray;
@@ -23,7 +24,7 @@ public class OpenWeatherMapForecastProvider implements WeatherForecastProvider {
         String url = "http://api.openweathermap.org/data/2.5/forecast/daily?zip=" + zipCode + "&cnt="
                 + numberOfDays + "&units=imperial&appid=" + apiKey;
 
-        JSONObject weather = new JSONObject(HttpClient.getResponseAsString(url));
+        JSONObject weather = new JSONObject(HttpClient.getResponseAsString(url, HttpRequestMethod.GET, null, null));
         return jsonToWeatherSummaries(weather);
     }
 
