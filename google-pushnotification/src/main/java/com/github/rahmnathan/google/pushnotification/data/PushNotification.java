@@ -1,32 +1,28 @@
 package com.github.rahmnathan.google.pushnotification.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PushNotification {
     private final String to;
-    private final String title;
-    private final String body;
+    private final Map<String, String> data;
 
-    public PushNotification(String to, String title, String body) {
+    public PushNotification(String to, Map<String, String> data) {
         this.to = to;
-        this.title = title;
-        this.body = body;
+        this.data = data;
     }
 
     public String getTo() {
         return to;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getBody() {
-        return body;
+    public Map<String, String> getData() {
+        return data;
     }
 
     public static class Builder {
         private String recipientToken;
-        private String notificationTitle;
-        private String notificationBody;
+        private Map<String, String> data = new HashMap<>();
 
         public static Builder newInstance(){
             return new Builder();
@@ -37,18 +33,13 @@ public class PushNotification {
             return this;
         }
 
-        public Builder setNotificationTitle(String notificationTitle) {
-            this.notificationTitle = notificationTitle;
-            return this;
-        }
-
-        public Builder setNotificationBody(String notificationBody) {
-            this.notificationBody = notificationBody;
+        public Builder addData(String key, String value){
+            data.put(key, value);
             return this;
         }
 
         public PushNotification build(){
-            return new PushNotification(recipientToken, notificationTitle, notificationBody);
+            return new PushNotification(recipientToken, data);
         }
     }
 }
