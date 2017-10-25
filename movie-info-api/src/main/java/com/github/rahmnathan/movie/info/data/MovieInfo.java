@@ -49,12 +49,20 @@ public class MovieInfo implements Serializable {
     }
 
     public boolean hasMissingValues(){
-        return image == null || title == null || IMDBRating == null || metaRating == null || releaseYear == null || genre == null;
+        return image == null || title == null || IMDBRating == null || metaRating == null || releaseYear == null || genre == null
+                || image.equals("") || title.equals("") || IMDBRating.equals("") || metaRating.equals("") | releaseYear.equals("") || genre.equals("");
     }
 
     @Override
-    public String toString(){
-        return title;
+    public String toString() {
+        return "MovieInfo{" +
+                "image='" + image + '\'' +
+                ", title='" + title + '\'' +
+                ", IMDBRating='" + IMDBRating + '\'' +
+                ", metaRating='" + metaRating + '\'' +
+                ", releaseYear='" + releaseYear + '\'' +
+                ", genre='" + genre + '\'' +
+                '}';
     }
 
     public static class Builder {
