@@ -48,6 +48,10 @@ public class MovieInfo implements Serializable {
         return genre;
     }
 
+    public boolean hasMissingValues(){
+        return image == null || title == null || IMDBRating == null || metaRating == null || releaseYear == null || genre == null;
+    }
+
     @Override
     public String toString(){
         return title;
