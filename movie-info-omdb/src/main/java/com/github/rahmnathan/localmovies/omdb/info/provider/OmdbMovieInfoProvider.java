@@ -3,6 +3,7 @@ package com.github.rahmnathan.localmovies.omdb.info.provider;
 import com.github.rahmnathan.movie.info.api.IMovieInfoProvider;
 import com.github.rahmnathan.movie.info.data.MovieInfo;
 import org.imgscalr.Scalr;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +13,11 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 @Component
 public class OmdbMovieInfoProvider implements IMovieInfoProvider {
+    private final Logger logger = Logger.getLogger(OmdbMovieInfoProvider.class.getName());
     private final MovieInfoMapper movieInfoMapper = new MovieInfoMapper();
     private final OmdbRawDataProvider dataProvider;
 
@@ -35,8 +38,13 @@ public class OmdbMovieInfoProvider implements IMovieInfoProvider {
     }
 
     private byte[] loadPoster(JSONObject jsonMovieInfo) {
-        String posterUrl = jsonMovieInfo.getString("Poster");
-        return scaleImage(dataProvider.loadMoviePoster(posterUrl));
+        try {
+            String posterUrl = jsonMovieInfo.getString("Poster");
+            return scaleImage(dataProvider.loadMoviePoster(posterUrl));
+        } catch (JSONException e){
+            logger.severe(e.toString());
+            return new byte[0];
+        }
     }
 
     private byte[] scaleImage(byte[] poster) {
