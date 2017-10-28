@@ -3,23 +3,24 @@ package com.github.rahmnathan.localmovies.omdb.info.provider;
 import com.github.rahmnathan.movie.info.api.IMovieInfoProvider;
 import com.github.rahmnathan.movie.info.data.MovieInfo;
 import org.imgscalr.Scalr;
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
+import javax.inject.Inject;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
+@Component
 public class OmdbMovieInfoProvider implements IMovieInfoProvider {
-    private final OmdbRawDataProvider dataProvider;
     private final MovieInfoMapper movieInfoMapper = new MovieInfoMapper();
+    private final OmdbRawDataProvider dataProvider;
 
-    public OmdbMovieInfoProvider(String apiKey){
-        this.dataProvider = new OmdbRawDataProvider(apiKey);
+    @Inject
+    public OmdbMovieInfoProvider(OmdbRawDataProvider dataProvider){
+        this.dataProvider = dataProvider;
     }
 
     @Override
@@ -34,12 +35,8 @@ public class OmdbMovieInfoProvider implements IMovieInfoProvider {
     }
 
     private byte[] loadPoster(JSONObject jsonMovieInfo) {
-        try {
-            URL url = new URL(jsonMovieInfo.get("Poster").toString());
-            return scaleImage(dataProvider.loadMoviePoster(url));
-        } catch (MalformedURLException | JSONException e) {
-            return new byte[0];
-        }
+        String posterUrl = jsonMovieInfo.getString("Poster");
+        return scaleImage(dataProvider.loadMoviePoster(posterUrl));
     }
 
     private byte[] scaleImage(byte[] poster) {

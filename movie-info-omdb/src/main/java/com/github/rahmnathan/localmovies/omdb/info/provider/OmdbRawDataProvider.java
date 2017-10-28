@@ -1,44 +1,54 @@
 package com.github.rahmnathan.localmovies.omdb.info.provider;
 
-import com.github.rahmnathan.http.control.HttpClient;
-import com.github.rahmnathan.http.data.HttpRequestMethod;
-import com.google.common.io.ByteStreams;
+import org.apache.camel.Exchange;
+import org.apache.camel.ProducerTemplate;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import java.io.*;
-import java.net.URL;
+import javax.inject.Inject;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
+@Component
 public class OmdbRawDataProvider {
-    private final Logger logger = Logger.getLogger(OmdbRawDataProvider.class.getName());
-    private final String apiKey;
 
-    public OmdbRawDataProvider(String apiKey){
-        this.apiKey = apiKey;
+    @Value("${omdb.api.key}")
+    private String apiKey;
+    private final Logger logger = Logger.getLogger(OmdbRawDataProvider.class.getName());
+    private final ProducerTemplate producerTemplate;
+
+    @Inject
+    public OmdbRawDataProvider(ProducerTemplate producerTemplate){
+        this.producerTemplate = producerTemplate;
     }
 
     JSONObject loadMovieInfo(String title) {
-        String response = "";
-        try {
-            String url = "http://www.omdbapi.com/?t=" + URLEncoder.encode(title, StandardCharsets.UTF_8.name()) + "&apikey=" + apiKey;
-            logger.info("Loading MovieInfo from OMDB - " + url);
+        String response = producerTemplate.request("direct:omdb",
+                exchange -> exchange.getIn()
+                    .setHeader(Exchange.HTTP_QUERY,"t=" + URLEncoder.encode(title, StandardCharsets.UTF_8.name())
+                            + "&apikey=" + apiKey))
+                    .getOut()
+                    .getBody(String.class);
 
-            response = HttpClient.getResponseAsString(url, HttpRequestMethod.GET, null, null);
-        } catch (UnsupportedEncodingException e){
-            logger.severe(e.toString());
-        }
+        logger.info("Title:" + title + " Response: " + response);
+
+        if(response == null)
+            return new JSONObject();
 
         return new JSONObject(response);
     }
 
-    byte[] loadMoviePoster(URL imageURL) {
-        try(InputStream is = imageURL.openConnection().getInputStream()){
-            return ByteStreams.toByteArray(is);
-        } catch (IOException e){
-            logger.fine(e.toString());
-            return new byte[0];
-        }
+    byte[] loadMoviePoster(String imageURL) {
+        Exchange response = producerTemplate.request("direct:omdb",
+                exchange -> exchange.getIn().setHeader(Exchange.HTTP_URI, imageURL));
+
+        byte[] image = response.getOut().getBody(byte[].class);
+
+        if(image == null)
+            image = new byte[0];
+
+        return image;
     }
 }
