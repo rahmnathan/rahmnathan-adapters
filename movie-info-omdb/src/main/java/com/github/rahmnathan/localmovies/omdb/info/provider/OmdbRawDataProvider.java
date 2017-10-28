@@ -41,10 +41,10 @@ public class OmdbRawDataProvider {
     }
 
     byte[] loadMoviePoster(String imageURL) {
-        Exchange response = producerTemplate.request("direct:omdb",
-                exchange -> exchange.getIn().setHeader(Exchange.HTTP_URI, imageURL));
-
-        byte[] image = response.getOut().getBody(byte[].class);
+        byte[] image = producerTemplate.request("direct:omdb",
+                exchange -> exchange.getIn().setHeader(Exchange.HTTP_URI, imageURL))
+                .getOut()
+                .getBody(byte[].class);
 
         if(image == null)
             image = new byte[0];
