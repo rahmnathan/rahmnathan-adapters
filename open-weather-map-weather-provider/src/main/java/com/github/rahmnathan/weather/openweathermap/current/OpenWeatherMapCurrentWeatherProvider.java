@@ -24,18 +24,18 @@ public class OpenWeatherMapCurrentWeatherProvider implements CurrentWeatherProvi
     }
 
     private CurrentWeather assembleCurrentWeather(JSONObject jsonObject) {
-        JSONObject weather = (JSONObject) ((JSONArray) jsonObject.get("weather")).get(0);
-        JSONObject main = (JSONObject) jsonObject.get("main");
-        JSONObject wind = (JSONObject) jsonObject.get("wind");
+        JSONObject weather = jsonObject.getJSONArray("weather").getJSONObject(0);
+        JSONObject main = jsonObject.getJSONObject("main");
+        JSONObject wind = jsonObject.getJSONObject("wind");
         String iconUrl = "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
 
         return CurrentWeather.Builder.newInstance()
-                .highTemp(String.valueOf(main.get("temp_max")))
-                .lowTemp(String.valueOf(main.get("temp_min")))
-                .temp((String.valueOf(main.get("temp"))).split("\\.")[0])
-                .windDirection(String.valueOf(wind.get("deg")))
-                .windSpeed(String.valueOf(wind.get("speed")))
-                .sky((String) weather.get("description"))
+                .highTemp(main.getString("temp_max"))
+                .lowTemp(main.getString("temp_min"))
+                .temp((main.getString("temp")).split("\\.")[0])
+                .windDirection(wind.getString("deg"))
+                .windSpeed(wind.getString("speed"))
+                .sky( weather.getString("description"))
                 .icon(HttpClient.getResponseAsBytes(iconUrl))
                 .build();
     }

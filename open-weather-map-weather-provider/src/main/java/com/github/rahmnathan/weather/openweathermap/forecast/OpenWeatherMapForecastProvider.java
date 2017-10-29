@@ -35,26 +35,25 @@ public class OpenWeatherMapForecastProvider implements WeatherForecastProvider {
         JSONArray weatherList = jsonObject.getJSONArray("list");
         List<WeatherSummary> summaryList = new ArrayList<>();
 
-        for(Object jsonDay : weatherList) {
-            JSONObject object = (JSONObject) jsonDay;
-
-            JSONObject temp = object.getJSONObject("temp");
+        weatherList.iterator().forEachRemaining( day -> {
+            JSONObject dayJson = (JSONObject) day;
+            JSONObject temp = dayJson.getJSONObject("temp");
 
             WeatherSummary.Builder builder = WeatherSummary.Builder.newInstance()
-                .setHighTemp(Double.valueOf(temp.getDouble("max")).intValue())
-                .setLowTemp(Double.valueOf(temp.get("min").toString()).intValue())
-                .setHumidity(object.get("humidity").toString())
-                .setWindSpeed(Double.valueOf(object.getDouble("speed")).intValue())
-                .setDateTime(object.getLong("dt"));
+                    .setHighTemp(Double.valueOf(temp.getDouble("max")).intValue())
+                    .setLowTemp(Double.valueOf(temp.get("min").toString()).intValue())
+                    .setHumidity(dayJson.get("humidity").toString())
+                    .setWindSpeed(Double.valueOf(dayJson.getDouble("speed")).intValue())
+                    .setDateTime(dayJson.getLong("dt"));
 
-            JSONObject weather = (JSONObject) object.getJSONArray("weather").get(0);
+            JSONObject weather = dayJson.getJSONArray("weather").getJSONObject(0);
             String iconUrl = "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
 
             builder.setSky(weather.getString("main"))
-                .setIcon( HttpClient.getResponseAsBytes(iconUrl));
+                    .setIcon(HttpClient.getResponseAsBytes(iconUrl));
 
             summaryList.add(builder.build());
-        }
+        });
 
         return summaryList;
     }
