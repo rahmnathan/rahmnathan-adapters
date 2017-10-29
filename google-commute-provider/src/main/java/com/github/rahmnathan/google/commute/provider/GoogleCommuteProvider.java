@@ -8,13 +8,13 @@ import org.json.JSONObject;
 import java.util.logging.Logger;
 
 public class GoogleCommuteProvider implements CommuteProvider {
-    private final Logger logger = Logger.getLogger(GoogleCommuteProvider.class.getName());
     private final String apiKey;
 
     public GoogleCommuteProvider(String apiKey) {
         this.apiKey = apiKey;
     }
 
+    @Override
     public String getCommuteTime(String startLocation, String endLocation){
         JSONObject jsonCommute = getCommuteContent(startLocation, endLocation);
         return getTime(jsonCommute);
@@ -29,9 +29,9 @@ public class GoogleCommuteProvider implements CommuteProvider {
     }
 
     private String getTime(JSONObject jsonObject){
-        JSONObject firstRoute = ((JSONArray) jsonObject.get("routes")).getJSONObject(0);
-        JSONObject legs = ((JSONArray) firstRoute.get("legs")).getJSONObject(0);
-        JSONObject duration = (JSONObject) legs.get("duration");
+        JSONObject firstRoute = jsonObject.getJSONArray("routes").getJSONObject(0);
+        JSONObject legs = firstRoute.getJSONArray("legs").getJSONObject(0);
+        JSONObject duration = legs.getJSONObject("duration");
         return duration.getString("text");
     }
 }

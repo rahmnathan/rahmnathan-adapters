@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Component
@@ -27,28 +28,21 @@ public class OmdbRawDataProvider {
     JSONObject loadMovieInfo(String title) {
         String response = producerTemplate.request("direct:omdb",
                 exchange -> exchange.getIn()
-                    .setHeader(Exchange.HTTP_QUERY,"t=" + URLEncoder.encode(title, StandardCharsets.UTF_8.name())
-                            + "&apikey=" + apiKey))
+                    .setHeader(Exchange.HTTP_QUERY,"t=" + URLEncoder.encode(title, StandardCharsets.UTF_8.name()) + "&apikey=" + apiKey))
                     .getOut()
                     .getBody(String.class);
 
         logger.info("Title:" + title + " Response: " + response);
 
-        if(response == null)
-            return new JSONObject();
-
-        return new JSONObject(response);
+        return response != null ? new JSONObject(response) : new JSONObject();
     }
 
-    byte[] loadMoviePoster(String imageURL) {
+    Optional<byte[]> loadMoviePoster(String imageURL) {
         byte[] image = producerTemplate.request("direct:omdb",
                 exchange -> exchange.getIn().setHeader(Exchange.HTTP_URI, imageURL))
                 .getOut()
                 .getBody(byte[].class);
 
-        if(image == null)
-            image = new byte[0];
-
-        return image;
+        return Optional.ofNullable(image);
     }
 }
