@@ -23,35 +23,26 @@ public class OmdbMovieInfoProvider implements IMovieInfoProvider {
     private final OmdbRawDataProvider dataProvider;
 
     @Inject
-    public OmdbMovieInfoProvider(OmdbRawDataProvider dataProvider){
+    public OmdbMovieInfoProvider(OmdbRawDataProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
 
     @Override
     public MovieInfo loadMovieInfo(String title) {
-        String fileName = title;
-        if (title.charAt(title.length() - 4) == '.')
-            title = title.substring(0, title.length() - 4);
-
         JSONObject jsonMovieInfo = dataProvider.loadMovieInfo(title);
-
         Optional<byte[]> poster = loadPoster(jsonMovieInfo);
-        if (!poster.isPresent()) {
-            return movieInfoMapper.jsonToMovieInfo(jsonMovieInfo, fileName);
-        }
+        if (!poster.isPresent())
+            return movieInfoMapper.jsonToMovieInfo(jsonMovieInfo, title);
 
-        return movieInfoMapper.jsonToMovieInfo(jsonMovieInfo, poster.get(), fileName);
+        return movieInfoMapper.jsonToMovieInfo(jsonMovieInfo, poster.get(), title);
     }
 
     private Optional<byte[]> loadPoster(JSONObject jsonMovieInfo) {
         try {
             String posterUrl = jsonMovieInfo.getString("Poster");
             Optional<byte[]> poster = dataProvider.loadMoviePoster(posterUrl);
-
-            if(poster.isPresent()) {
-                return scaleImage(poster.get());
-            }
-        } catch (JSONException e){
+            return poster.flatMap(this::scaleImage);
+        } catch (JSONException e) {
             logger.severe(e.toString());
         }
 
@@ -59,13 +50,13 @@ public class OmdbMovieInfoProvider implements IMovieInfoProvider {
     }
 
     private Optional<byte[]> scaleImage(byte[] poster) {
-        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(poster));
             bufferedImage = Scalr.resize(bufferedImage, Scalr.Method.ULTRA_QUALITY, 200);
             ImageIO.write(bufferedImage, "jpg", outputStream);
             outputStream.flush();
             return Optional.ofNullable(outputStream.toByteArray());
-        } catch (IOException e){
+        } catch (IOException e) {
             logger.severe(e.toString());
         }
 
