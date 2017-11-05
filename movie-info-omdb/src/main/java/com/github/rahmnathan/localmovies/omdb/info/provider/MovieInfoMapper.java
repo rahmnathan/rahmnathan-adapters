@@ -13,7 +13,7 @@ class MovieInfoMapper {
         return builder.build();
     }
 
-    MovieInfo jsonToMovieInfo(JSONObject jsonObject, byte[] poster, String title){
+    MovieInfo jsonToMovieInfo(JSONObject jsonObject, String title, byte[] poster){
         MovieInfo.Builder movieInfoBuilder = mapMovieInfo(jsonObject, title);
         mapPoster(movieInfoBuilder, poster);
 
@@ -36,13 +36,11 @@ class MovieInfoMapper {
         return movieInfoBuilder;
     }
 
-    private MovieInfo.Builder mapPoster(MovieInfo.Builder movieInfoBuilder, byte[] poster){
+    private void mapPoster(MovieInfo.Builder movieInfoBuilder, byte[] poster){
         try {
             movieInfoBuilder.setImage(Base64.getEncoder().encodeToString(poster));
         } catch (Exception e) {
             movieInfoBuilder.setImage(null);
         }
-
-        return movieInfoBuilder;
     }
 }

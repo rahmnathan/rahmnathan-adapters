@@ -31,10 +31,8 @@ public class OmdbMovieInfoProvider implements IMovieInfoProvider {
     public MovieInfo loadMovieInfo(String title) {
         JSONObject jsonMovieInfo = dataProvider.loadMovieInfo(title);
         Optional<byte[]> poster = loadPoster(jsonMovieInfo);
-        if (!poster.isPresent())
-            return movieInfoMapper.jsonToMovieInfo(jsonMovieInfo, title);
+        return poster.map(bytes -> movieInfoMapper.jsonToMovieInfo(jsonMovieInfo, title, bytes)).orElseGet(() -> movieInfoMapper.jsonToMovieInfo(jsonMovieInfo, title));
 
-        return movieInfoMapper.jsonToMovieInfo(jsonMovieInfo, poster.get(), title);
     }
 
     private Optional<byte[]> loadPoster(JSONObject jsonMovieInfo) {
