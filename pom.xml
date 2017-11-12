@@ -26,6 +26,7 @@
         <module>movie-info-api</module>
         <module>movie-info-omdb</module>
         <module>google-pushnotification</module>
+        <module>keycloak-auth-provider</module>
     </modules>
 
     <dependencyManagement>
