@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Component
@@ -34,7 +35,7 @@ public class CamelOmdbConfig {
                 }
             });
         } catch (Exception e){
-            logger.severe(e.toString());
+            logger.log(Level.SEVERE, "Failure adding routes to Camel context", e);
         }
     }
 }

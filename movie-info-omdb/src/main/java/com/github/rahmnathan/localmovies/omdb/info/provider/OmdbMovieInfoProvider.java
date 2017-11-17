@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Component
@@ -41,7 +42,7 @@ public class OmdbMovieInfoProvider implements IMovieInfoProvider {
             Optional<byte[]> poster = dataProvider.loadMoviePoster(posterUrl);
             return poster.flatMap(this::scaleImage);
         } catch (JSONException e) {
-            logger.severe(e.toString());
+            logger.log(Level.SEVERE, "Failed loading poster", e);
         }
 
         return Optional.empty();
@@ -55,7 +56,7 @@ public class OmdbMovieInfoProvider implements IMovieInfoProvider {
             outputStream.flush();
             return Optional.ofNullable(outputStream.toByteArray());
         } catch (IOException e) {
-            logger.severe(e.toString());
+            logger.log(Level.SEVERE, "Failed scaling image", e);
         }
 
         return Optional.empty();

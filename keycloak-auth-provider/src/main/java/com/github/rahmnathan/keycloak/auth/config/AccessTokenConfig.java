@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.HttpMethod;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Component
@@ -38,7 +39,7 @@ public class AccessTokenConfig {
                 }
             });
         } catch (Exception e){
-            logger.severe(e.toString());
+            logger.log(Level.SEVERE, "Failure adding routes to Camel context", e);
         }
     }
 }

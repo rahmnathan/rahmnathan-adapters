@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class KeycloakUtils {
@@ -38,7 +39,7 @@ public class KeycloakUtils {
                 sb.append(URLEncoder.encode(key, "UTF-8")).append("=")
                         .append(URLEncoder.encode(value, "UTF-8")).append("&");
             } catch (UnsupportedEncodingException e) {
-                logger.severe(e.toString());
+                logger.log(Level.SEVERE, "Failed building login info. Parameter could not be encoded.", e);
             }
         });
 
