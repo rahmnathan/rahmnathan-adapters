@@ -2,6 +2,7 @@ package com.github.rahmnathan.google.pushnotification.config;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -29,17 +30,20 @@ public class CamelPushNotificationConfig {
         try {
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
-                public void configure() throws Exception {
-                    onException(Exception.class)
+                public void configure() {
+                    onException(HttpOperationFailedException.class)
                             .useExponentialBackOff()
+                            .backOffMultiplier(2)
                             .redeliveryDelay(2000)
-                            .maximumRedeliveries(5);
+                            .maximumRedeliveries(2)
+                            .end();
 
                     from("seda:pushnotification")
                             .marshal().json(JsonLibrary.Jackson)
                             .setHeader("Authorization", constant("key=" + serverKey))
                             .setHeader("Content-Type", constant("application/json"))
-                            .to("http4://fcm.googleapis.com/fcm/send");
+                            .to("http4://fcm.googleapis.com/fcm/send")
+                            .end();
                 }
             });
         } catch (Exception e){

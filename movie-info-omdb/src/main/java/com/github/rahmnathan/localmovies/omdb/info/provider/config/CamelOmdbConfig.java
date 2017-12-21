@@ -1,7 +1,9 @@
 package com.github.rahmnathan.localmovies.omdb.info.provider.config;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.http.common.HttpOperationFailedException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -25,13 +27,17 @@ public class CamelOmdbConfig {
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
                 public void configure() throws Exception {
-                    onException(Exception.class)
+                    onException(HttpOperationFailedException.class)
                             .useExponentialBackOff()
+                            .backOffMultiplier(2)
                             .redeliveryDelay(1000)
-                            .maximumRedeliveries(5);
+                            .maximumRedeliveries(3)
+                            .onWhen(exchange -> exchange.getProperty(Exchange.EXCEPTION_CAUGHT, HttpOperationFailedException.class).getStatusCode() != 404)
+                            .end();
 
                     from("direct:omdb")
-                            .to("http4://www.omdbapi.com");
+                            .to("http4://www.omdbapi.com")
+                            .end();
                 }
             });
         } catch (Exception e){
