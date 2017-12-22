@@ -3,6 +3,7 @@ package com.github.rahmnathan.keycloak.auth.config;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.http.common.HttpOperationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,16 +27,19 @@ public class AccessTokenConfig {
         try {
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
-                public void configure() throws Exception {
-                    onException(Exception.class)
+                public void configure() {
+                    onException(HttpOperationFailedException.class)
                             .useExponentialBackOff()
-                            .redeliveryDelay(1000)
-                            .maximumRedeliveries(5);
+                            .backOffMultiplier(2)
+                            .redeliveryDelay(500)
+                            .maximumRedeliveries(3)
+                            .end();
 
                     from("direct:accesstoken")
                             .setHeader(Exchange.HTTP_METHOD, constant(HttpMethod.POST))
                             .setHeader(Exchange.CONTENT_TYPE, constant("application/x-www-form-urlencoded"))
-                            .to("https4://localmovies-cloud.hopto.org/auth/realms/LocalMovies/protocol/openid-connect/token");
+                            .to("https4://localmovies-cloud.hopto.org/auth/realms/LocalMovies/protocol/openid-connect/token")
+                            .end();
                 }
             });
         } catch (Exception e){

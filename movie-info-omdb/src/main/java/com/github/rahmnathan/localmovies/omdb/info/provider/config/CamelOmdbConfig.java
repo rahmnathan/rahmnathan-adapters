@@ -26,7 +26,7 @@ public class CamelOmdbConfig {
         try {
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
-                public void configure() throws Exception {
+                public void configure() {
                     onException(HttpOperationFailedException.class)
                             .useExponentialBackOff()
                             .backOffMultiplier(2)

@@ -20,7 +20,6 @@
 
     <modules>
         <module>google-commute-provider</module>
-        <module>commute-provider-api</module>
         <module>weather-provider-api</module>
         <module>open-weather-map-weather-provider</module>
         <module>movie-info-api</module>
