@@ -4,17 +4,17 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.http.common.HttpOperationFailedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.HttpMethod;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Component
 public class AccessTokenConfig {
-    private final Logger logger = Logger.getLogger(AccessTokenConfig.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(AccessTokenConfig.class.getName());
     private final CamelContext camelContext;
 
     @Autowired
@@ -43,7 +43,7 @@ public class AccessTokenConfig {
                 }
             });
         } catch (Exception e){
-            logger.log(Level.SEVERE, "Failure adding routes to Camel context", e);
+            logger.error("Failure adding routes to Camel context", e);
         }
     }
 }

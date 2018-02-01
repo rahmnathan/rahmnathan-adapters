@@ -4,20 +4,20 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.camel.model.dataformat.JsonLibrary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Component
 public class CamelPushNotificationConfig {
 
     @Value(value = "${push.notification.key}")
     private String serverKey;
-    private final Logger logger = Logger.getLogger(CamelPushNotificationConfig.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(CamelPushNotificationConfig.class.getName());
     private final CamelContext camelContext;
 
     @Inject
@@ -47,7 +47,7 @@ public class CamelPushNotificationConfig {
                 }
             });
         } catch (Exception e){
-            logger.log(Level.SEVERE, "Failure adding routes to Camel context", e);
+            logger.error("Failure adding routes to Camel context", e);
         }
     }
 }

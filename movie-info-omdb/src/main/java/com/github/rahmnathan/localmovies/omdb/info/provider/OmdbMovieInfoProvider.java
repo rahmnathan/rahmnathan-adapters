@@ -5,6 +5,8 @@ import com.github.rahmnathan.movie.info.data.MovieInfo;
 import org.imgscalr.Scalr;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
@@ -14,12 +16,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Component
 public class OmdbMovieInfoProvider implements IMovieInfoProvider {
-    private final Logger logger = Logger.getLogger(OmdbMovieInfoProvider.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(OmdbMovieInfoProvider.class.getName());
     private final MovieInfoMapper movieInfoMapper = new MovieInfoMapper();
     private final OmdbRawDataProvider dataProvider;
 
@@ -42,7 +42,7 @@ public class OmdbMovieInfoProvider implements IMovieInfoProvider {
             Optional<byte[]> poster = dataProvider.loadMoviePoster(posterUrl);
             return poster.flatMap(this::scaleImage);
         } catch (JSONException e) {
-            logger.log(Level.SEVERE, "Failed loading poster", e);
+            logger.error("Failed loading poster", e);
         }
 
         return Optional.empty();
@@ -56,7 +56,7 @@ public class OmdbMovieInfoProvider implements IMovieInfoProvider {
             outputStream.flush();
             return Optional.ofNullable(outputStream.toByteArray());
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Failed scaling image", e);
+            logger.error("Failed scaling image", e);
         }
 
         return Optional.empty();

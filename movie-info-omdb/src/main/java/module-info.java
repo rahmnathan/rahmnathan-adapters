@@ -1,7 +1,6 @@
 module movie.info.omdb {
     exports com.github.rahmnathan.localmovies.omdb.info.provider;
     requires spring.context;
-    requires java.logging;
     requires camel.core;
     requires javaee.api;
     requires camel.http.common;
@@ -10,4 +9,5 @@ module movie.info.omdb {
     requires java.desktop;
     requires imgscalr.lib;
     requires spring.beans;
+    requires slf4j.api;
 }

@@ -9,10 +9,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class OpenWeatherMapForecastProvider implements WeatherForecastProvider {
-    private final Logger logger = Logger.getLogger(OpenWeatherMapForecastProvider.class.getName());
     private final String apiKey;
 
     public OpenWeatherMapForecastProvider(String apiKey){

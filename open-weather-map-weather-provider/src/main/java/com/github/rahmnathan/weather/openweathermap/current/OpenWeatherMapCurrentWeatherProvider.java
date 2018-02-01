@@ -4,13 +4,9 @@ import com.github.rahmnathan.http.control.HttpClient;
 import com.github.rahmnathan.http.data.HttpRequestMethod;
 import com.github.rahmnathan.weather.current.CurrentWeather;
 import com.github.rahmnathan.weather.current.CurrentWeatherProvider;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.logging.Logger;
-
 public class OpenWeatherMapCurrentWeatherProvider implements CurrentWeatherProvider {
-    private final Logger logger = Logger.getLogger(OpenWeatherMapCurrentWeatherProvider.class.getName());
     private final String apiKey;
 
     public OpenWeatherMapCurrentWeatherProvider(String apiKey){

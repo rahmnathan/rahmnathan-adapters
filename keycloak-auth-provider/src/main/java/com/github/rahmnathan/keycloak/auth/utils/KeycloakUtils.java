@@ -3,16 +3,16 @@ package com.github.rahmnathan.keycloak.auth.utils;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class KeycloakUtils {
-    private static final Logger logger = Logger.getLogger(KeycloakUtils.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(KeycloakUtils.class.getName());
 
     public static String getAccessToken(String username, String password, ProducerTemplate producerTemplate) {
         String requestBody = buildLoginInfo(username, password);
@@ -39,7 +39,7 @@ public class KeycloakUtils {
                 sb.append(URLEncoder.encode(key, "UTF-8")).append("=")
                         .append(URLEncoder.encode(value, "UTF-8")).append("&");
             } catch (UnsupportedEncodingException e) {
-                logger.log(Level.SEVERE, "Failed building login info. Parameter could not be encoded.", e);
+                logger.error("Failed building login info. Parameter could not be encoded.", e);
             }
         });
 

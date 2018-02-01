@@ -3,6 +3,8 @@ package com.github.rahmnathan.localmovies.omdb.info.provider;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,14 +12,13 @@ import javax.inject.Inject;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Component
 public class OmdbRawDataProvider {
 
     @Value("${omdb.api.key}")
     private String apiKey;
-    private final Logger logger = Logger.getLogger(OmdbRawDataProvider.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(OmdbRawDataProvider.class.getName());
     private final ProducerTemplate producerTemplate;
 
     @Inject
@@ -32,7 +33,7 @@ public class OmdbRawDataProvider {
                     .getOut()
                     .getBody(String.class);
 
-        logger.info("Title:" + title + " Response: " + response);
+        logger.info("Title: {} Response: {}", title, response);
 
         return response != null ? new JSONObject(response) : new JSONObject();
     }
