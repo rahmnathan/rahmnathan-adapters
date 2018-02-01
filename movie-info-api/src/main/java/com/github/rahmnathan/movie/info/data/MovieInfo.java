@@ -50,7 +50,7 @@ public class MovieInfo implements Serializable {
 
     public boolean hasMissingValues(){
         return image == null || title == null || IMDBRating == null || metaRating == null || releaseYear == null || genre == null
-                || image.equals("") || title.equals("") || IMDBRating.equals("") || metaRating.equals("") | releaseYear.equals("") || genre.equals("");
+                || image.equals("") || title.equals("") || IMDBRating.equals("") || metaRating.equals("") || releaseYear.equals("") || genre.equals("");
     }
 
     @Override

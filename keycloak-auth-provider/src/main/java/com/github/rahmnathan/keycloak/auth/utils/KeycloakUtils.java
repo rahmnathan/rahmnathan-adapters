@@ -14,6 +14,10 @@ import java.util.Map;
 public class KeycloakUtils {
     private static final Logger logger = LoggerFactory.getLogger(KeycloakUtils.class.getName());
 
+    private KeycloakUtils(){
+        // No need to instantiate this
+    }
+
     public static String getAccessToken(String username, String password, ProducerTemplate producerTemplate) {
         String requestBody = buildLoginInfo(username, password);
         Map<String, Object> headers = Map.of(Exchange.CONTENT_LENGTH, requestBody.getBytes().length);
