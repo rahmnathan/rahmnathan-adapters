@@ -7,22 +7,22 @@ import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
+import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-@Component
+@ManagedBean
 public class CamelPushNotificationConfig {
 
-    @Value(value = "${push.notification.key}")
-    private String serverKey;
     private final Logger logger = LoggerFactory.getLogger(CamelPushNotificationConfig.class.getName());
     private final CamelContext camelContext;
+    private final String serverKey;
 
     @Inject
-    public CamelPushNotificationConfig(CamelContext camelContext){
+    public CamelPushNotificationConfig(CamelContext camelContext, @Value(value = "${push.notification.key}") String serverKey){
         this.camelContext = camelContext;
+        this.serverKey = serverKey;
     }
 
     @PostConstruct

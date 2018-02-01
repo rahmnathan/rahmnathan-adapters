@@ -6,18 +6,16 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.http.common.HttpOperationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
+import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.ws.rs.HttpMethod;
 
-@Component
+@ManagedBean
 public class AccessTokenConfig {
     private final Logger logger = LoggerFactory.getLogger(AccessTokenConfig.class.getName());
     private final CamelContext camelContext;
 
-    @Autowired
     public AccessTokenConfig(CamelContext camelContext){
         this.camelContext = camelContext;
     }
