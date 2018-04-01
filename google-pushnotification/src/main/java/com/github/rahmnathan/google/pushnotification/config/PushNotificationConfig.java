@@ -13,14 +13,14 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 @ManagedBean
-public class CamelPushNotificationConfig {
-
-    private final Logger logger = LoggerFactory.getLogger(CamelPushNotificationConfig.class.getName());
+public class PushNotificationConfig {
+    private final Logger logger = LoggerFactory.getLogger(PushNotificationConfig.class.getName());
+    public static final String GOOGLE_PUSH_NOTIFICATION_ROUTE = "seda:pushnotification";
     private final CamelContext camelContext;
     private final String serverKey;
 
     @Inject
-    public CamelPushNotificationConfig(CamelContext camelContext, @Value(value = "${push.notification.key}") String serverKey){
+    public PushNotificationConfig(CamelContext camelContext, @Value(value = "${push.notification.key}") String serverKey){
         this.camelContext = camelContext;
         this.serverKey = serverKey;
     }
@@ -38,11 +38,11 @@ public class CamelPushNotificationConfig {
                             .maximumRedeliveries(2)
                             .end();
 
-                    from("seda:pushnotification")
+                    from(GOOGLE_PUSH_NOTIFICATION_ROUTE)
                             .marshal().json(JsonLibrary.Jackson)
                             .setHeader("Authorization", constant("key=" + serverKey))
                             .setHeader("Content-Type", constant("application/json"))
-                            .to("http4://fcm.googleapis.com/fcm/send")
+                            .to("https4://fcm.googleapis.com/fcm/send")
                             .end();
                 }
             });
