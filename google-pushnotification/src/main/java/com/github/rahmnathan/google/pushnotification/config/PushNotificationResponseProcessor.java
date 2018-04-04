@@ -11,7 +11,7 @@ public class PushNotificationResponseProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) {
-        Integer responseCode = exchange.getOut().getHeader(Exchange.HTTP_RESPONSE_CODE, Integer.class);
+        Integer responseCode = exchange.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE, Integer.class);
         if(responseCode == null){
             HttpOperationFailedException exception = exchange.getException(HttpOperationFailedException.class);
             if(exception != null) {

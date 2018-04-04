@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 @ManagedBean
 public class PushNotificationConfig {
@@ -19,7 +18,6 @@ public class PushNotificationConfig {
     private final CamelContext camelContext;
     private final String serverKey;
 
-    @Inject
     public PushNotificationConfig(CamelContext camelContext, @Value(value = "${push.notification.key}") String serverKey){
         this.camelContext = camelContext;
         this.serverKey = serverKey;
