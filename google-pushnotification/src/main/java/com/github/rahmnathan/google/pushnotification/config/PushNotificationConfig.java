@@ -43,6 +43,7 @@ public class PushNotificationConfig {
                             .setHeader("Authorization", constant("key=" + serverKey))
                             .setHeader("Content-Type", constant("application/json"))
                             .to("https4://fcm.googleapis.com/fcm/send")
+                            .process(new PushNotificationResponseProcessor())
                             .end();
                 }
             });
