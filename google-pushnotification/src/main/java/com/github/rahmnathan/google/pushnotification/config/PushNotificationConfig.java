@@ -1,7 +1,9 @@
 package com.github.rahmnathan.google.pushnotification.config;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.http4.HttpMethods;
 import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
@@ -38,6 +40,7 @@ public class PushNotificationConfig {
 
                     from(GOOGLE_PUSH_NOTIFICATION_ROUTE)
                             .marshal().json(JsonLibrary.Jackson)
+                            .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
                             .setHeader("Authorization", constant("key=" + serverKey))
                             .setHeader("Content-Type", constant("application/json"))
                             .to("https4://fcm.googleapis.com/fcm/send")

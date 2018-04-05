@@ -5,19 +5,19 @@ import java.util.Map;
 
 public class PushNotification {
     private final String to;
-    private final Map<String, String> data;
+    private final Map<String, String> notification;
 
-    public PushNotification(String to, Map<String, String> data) {
+    public PushNotification(String to, Map<String, String> notification) {
         this.to = to;
-        this.data = data;
+        this.notification = notification;
     }
 
     public String getTo() {
         return to;
     }
 
-    public Map<String, String> getData() {
-        return data;
+    public Map<String, String> getNotification() {
+        return notification;
     }
 
     public static class Builder {
