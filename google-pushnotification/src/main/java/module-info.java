@@ -6,4 +6,5 @@ module google.pushnotification {
     requires javaee.api;
     requires camel.http.common;
     requires slf4j.api;
+    requires camel.http4;
 }
