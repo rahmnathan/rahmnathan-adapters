@@ -1,19 +1,21 @@
-package com.github.rahmnathan.localmovies.omdb.info.provider;
+package com.github.rahmnathan.localmovies.omdb.provider.control;
 
-import com.github.rahmnathan.movie.info.data.MovieInfo;
+import com.github.rahmnathan.localmovies.omdb.provider.TestUtils;
+import com.github.rahmnathan.movie.data.Movie;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static com.github.rahmnathan.localmovies.omdb.provider.control.MovieInfoMapper.jsonToMovieInfo;
+
 public class MovieInfoMapperTest {
-    private final MovieInfoMapper movieInfoMapper = new MovieInfoMapper();
     private static final JSONObject jsonObject = TestUtils.getJsonMovieInfo();
     private final String title = "Title";
     private final byte[] image = new byte[0];
 
     @Test
     public void jsonToMovieInfoTest(){
-        MovieInfo movieInfo = movieInfoMapper.jsonToMovieInfo(jsonObject, title, image);
+        Movie movieInfo = jsonToMovieInfo(jsonObject, title, image);
         Assert.assertEquals("10", movieInfo.getIMDBRating());
         Assert.assertEquals("11", movieInfo.getMetaRating());
         Assert.assertEquals("1900", movieInfo.getReleaseYear());
@@ -23,13 +25,13 @@ public class MovieInfoMapperTest {
 
     @Test
     public void testNullImage(){
-        MovieInfo movieInfo = movieInfoMapper.jsonToMovieInfo(jsonObject, title, null);
+        Movie movieInfo = jsonToMovieInfo(jsonObject, title, null);
         Assert.assertNull(movieInfo.getImage());
     }
 
     @Test
     public void testWithAbsentImage(){
-        MovieInfo movieInfo = movieInfoMapper.jsonToMovieInfo(jsonObject, title);
+        Movie movieInfo = jsonToMovieInfo(jsonObject, title);
         Assert.assertNull(movieInfo.getImage());
     }
 }

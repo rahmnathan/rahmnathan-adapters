@@ -1,5 +1,5 @@
 module movie.info.omdb {
-    exports com.github.rahmnathan.localmovies.omdb.info.provider;
+    exports com.github.rahmnathan.localmovies.omdb.provider.boundary;
     requires spring.context;
     requires camel.core;
     requires javaee.api;

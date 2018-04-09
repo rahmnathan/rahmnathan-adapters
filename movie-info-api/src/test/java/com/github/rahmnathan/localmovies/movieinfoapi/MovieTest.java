@@ -1,10 +1,10 @@
 package com.github.rahmnathan.localmovies.movieinfoapi;
 
-import com.github.rahmnathan.movie.info.data.MovieInfo;
+import com.github.rahmnathan.movie.data.Movie;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class MovieInfoTest {
+public class MovieTest {
 
     @Test
     public void movieInfoTest(){
@@ -14,7 +14,7 @@ public class MovieInfoTest {
         String metaRating = "TestMetaRating";
         String releaseYear = "TestReleaseYear";
 
-        MovieInfo movieInfo = MovieInfo.Builder.newInstance()
+        Movie movie = Movie.Builder.newInstance()
                 .setTitle(title)
                 .setImage(image)
                 .setIMDBRating(IMDBRating)
@@ -22,10 +22,10 @@ public class MovieInfoTest {
                 .setReleaseYear(releaseYear)
                 .build();
 
-        Assert.assertEquals(movieInfo.getTitle(), title);
-        Assert.assertEquals(movieInfo.getImage(), image);
-        Assert.assertEquals(movieInfo.getIMDBRating(), IMDBRating);
-        Assert.assertEquals(movieInfo.getMetaRating(), metaRating);
-        Assert.assertEquals(movieInfo.getReleaseYear(), releaseYear);
+        Assert.assertEquals(movie.getTitle(), title);
+        Assert.assertEquals(movie.getImage(), image);
+        Assert.assertEquals(movie.getIMDBRating(), IMDBRating);
+        Assert.assertEquals(movie.getMetaRating(), metaRating);
+        Assert.assertEquals(movie.getReleaseYear(), releaseYear);
     }
 }

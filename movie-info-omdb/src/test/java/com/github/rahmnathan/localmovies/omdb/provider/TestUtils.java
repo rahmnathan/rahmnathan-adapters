@@ -1,10 +1,10 @@
-package com.github.rahmnathan.localmovies.omdb.info.provider;
+package com.github.rahmnathan.localmovies.omdb.provider;
 
 import org.json.JSONObject;
 
-class TestUtils {
+public class TestUtils {
 
-    static JSONObject getJsonMovieInfo(){
+    public static JSONObject getJsonMovieInfo(){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("imdbRating", "10");
         jsonObject.put("Metascore", "11");

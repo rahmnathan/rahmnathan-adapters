@@ -1,4 +1,4 @@
 module movie.info.api {
-    exports com.github.rahmnathan.movie.info.api;
-    exports com.github.rahmnathan.movie.info.data;
+    exports com.github.rahmnathan.movie.api;
+    exports com.github.rahmnathan.movie.data;
 }

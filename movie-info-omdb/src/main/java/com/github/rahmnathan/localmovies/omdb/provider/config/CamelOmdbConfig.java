@@ -1,4 +1,4 @@
-package com.github.rahmnathan.localmovies.omdb.info.provider.config;
+package com.github.rahmnathan.localmovies.omdb.provider.config;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
@@ -6,17 +6,16 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.http.common.HttpOperationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
+import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
-@Component
+@ManagedBean
 public class CamelOmdbConfig {
     private final Logger logger = LoggerFactory.getLogger(CamelOmdbConfig.class.getName());
+    public static final String OMDB_ROUTE = "direct:omdb";
     private final CamelContext camelContext;
 
-    @Inject
     public CamelOmdbConfig(CamelContext camelContext){
         this.camelContext = camelContext;
     }
@@ -35,8 +34,8 @@ public class CamelOmdbConfig {
                             .onWhen(exchange -> exchange.getProperty(Exchange.EXCEPTION_CAUGHT, HttpOperationFailedException.class).getStatusCode() != 404)
                             .end();
 
-                    from("direct:omdb")
-                            .to("http4://www.omdbapi.com")
+                    from(OMDB_ROUTE)
+                            .to("https4://www.omdbapi.com")
                             .end();
                 }
             });

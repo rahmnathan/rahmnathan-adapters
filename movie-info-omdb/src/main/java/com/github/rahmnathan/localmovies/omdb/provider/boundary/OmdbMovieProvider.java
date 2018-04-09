@@ -1,7 +1,8 @@
-package com.github.rahmnathan.localmovies.omdb.info.provider;
+package com.github.rahmnathan.localmovies.omdb.provider.boundary;
 
-import com.github.rahmnathan.movie.info.api.IMovieInfoProvider;
-import com.github.rahmnathan.movie.info.data.MovieInfo;
+import com.github.rahmnathan.localmovies.omdb.provider.control.OmdbRawDataProvider;
+import com.github.rahmnathan.movie.api.MovieProvider;
+import com.github.rahmnathan.movie.data.Movie;
 import org.imgscalr.Scalr;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,22 +18,23 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.github.rahmnathan.localmovies.omdb.provider.control.MovieInfoMapper.jsonToMovieInfo;
+
 @Component
-public class OmdbMovieInfoProvider implements IMovieInfoProvider {
-    private final Logger logger = LoggerFactory.getLogger(OmdbMovieInfoProvider.class.getName());
-    private final MovieInfoMapper movieInfoMapper = new MovieInfoMapper();
+public class OmdbMovieProvider implements MovieProvider {
+    private final Logger logger = LoggerFactory.getLogger(OmdbMovieProvider.class.getName());
     private final OmdbRawDataProvider dataProvider;
 
     @Inject
-    public OmdbMovieInfoProvider(OmdbRawDataProvider dataProvider) {
+    public OmdbMovieProvider(OmdbRawDataProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
 
     @Override
-    public MovieInfo loadMovieInfo(String title) {
+    public Movie loadMovieInfo(String title) {
         JSONObject jsonMovieInfo = dataProvider.loadMovieInfo(title);
         Optional<byte[]> poster = loadPoster(jsonMovieInfo);
-        return poster.map(bytes -> movieInfoMapper.jsonToMovieInfo(jsonMovieInfo, title, bytes)).orElseGet(() -> movieInfoMapper.jsonToMovieInfo(jsonMovieInfo, title));
+        return poster.map(bytes -> jsonToMovieInfo(jsonMovieInfo, title, bytes)).orElseGet(() -> jsonToMovieInfo(jsonMovieInfo, title));
 
     }
 

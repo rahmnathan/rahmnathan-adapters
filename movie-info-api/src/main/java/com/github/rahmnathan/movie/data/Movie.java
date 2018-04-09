@@ -1,8 +1,8 @@
-package com.github.rahmnathan.movie.info.data;
+package com.github.rahmnathan.movie.data;
 
 import java.io.Serializable;
 
-public class MovieInfo implements Serializable {
+public class Movie implements Serializable {
 
     private String image;
     private String title;
@@ -11,7 +11,7 @@ public class MovieInfo implements Serializable {
     private String releaseYear;
     private String genre;
 
-    private MovieInfo(String title, String IMDBRating, String metaRating, String image, String releaseYear, String genre) {
+    private Movie(String title, String IMDBRating, String metaRating, String image, String releaseYear, String genre) {
         this.title = title;
         this.IMDBRating = IMDBRating;
         this.metaRating = metaRating;
@@ -20,7 +20,7 @@ public class MovieInfo implements Serializable {
         this.genre = genre;
     }
 
-    public MovieInfo(){
+    public Movie(){
         // Default constructor
     }
 
@@ -55,7 +55,7 @@ public class MovieInfo implements Serializable {
 
     @Override
     public String toString() {
-        return "MovieInfo{" +
+        return "Movie{" +
                 "image='" + image + '\'' +
                 ", title='" + title + '\'' +
                 ", IMDBRating='" + IMDBRating + '\'' +
@@ -107,36 +107,36 @@ public class MovieInfo implements Serializable {
             return this;
         }
 
-        public MovieInfo build(){
-            return new MovieInfo(title, IMDBRating, metaRating, image, releaseYear, genre);
+        public Movie build(){
+            return new Movie(title, IMDBRating, metaRating, image, releaseYear, genre);
         }
 
-        public static MovieInfo copyWithNewTitle(MovieInfo movieInfo, String title){
-            if(movieInfo == null)
+        public static Movie copyWithNewTitle(Movie movie, String title){
+            if(movie == null)
                 return Builder.newInstance().setTitle(title).build();
 
             return Builder.newInstance()
                     .setTitle(title)
-                    .setReleaseYear(movieInfo.getReleaseYear())
-                    .setMetaRating(movieInfo.getMetaRating())
-                    .setIMDBRating(movieInfo.getIMDBRating())
-                    .setImage(movieInfo.getImage())
-                    .setGenre(movieInfo.getGenre())
+                    .setReleaseYear(movie.getReleaseYear())
+                    .setMetaRating(movie.getMetaRating())
+                    .setIMDBRating(movie.getIMDBRating())
+                    .setImage(movie.getImage())
+                    .setGenre(movie.getGenre())
                     .build();
         }
 
-        public static MovieInfo copyWithNoImage(MovieInfo movieInfo){
-            if(movieInfo == null)
+        public static Movie copyWithNoImage(Movie movie){
+            if(movie == null)
                 return Builder.newInstance().build();
 
             Builder builder = Builder.newInstance()
-                    .setTitle(movieInfo.getTitle())
-                    .setReleaseYear(movieInfo.getReleaseYear())
-                    .setMetaRating(movieInfo.getMetaRating())
-                    .setIMDBRating(movieInfo.getIMDBRating())
-                    .setGenre(movieInfo.getGenre());
+                    .setTitle(movie.getTitle())
+                    .setReleaseYear(movie.getReleaseYear())
+                    .setMetaRating(movie.getMetaRating())
+                    .setIMDBRating(movie.getIMDBRating())
+                    .setGenre(movie.getGenre());
 
-            if(movieInfo.getImage() == null || movieInfo.getImage().equals("")){
+            if(movie.getImage() == null || movie.getImage().equals("")){
                 builder.setImage("noImage");
             } else {
                 builder.setImage("");
