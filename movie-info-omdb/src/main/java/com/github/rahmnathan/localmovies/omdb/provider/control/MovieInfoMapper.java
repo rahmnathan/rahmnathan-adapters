@@ -36,6 +36,10 @@ public class MovieInfoMapper {
             movieInfoBuilder.setReleaseYear(jsonObject.getString("Year"));
         if(jsonObject.has("Genre"))
             movieInfoBuilder.setGenre(jsonObject.getString("Genre"));
+        if(jsonObject.has("Plot"))
+            movieInfoBuilder.setPlot(jsonObject.getString("Plot"));
+        if(jsonObject.has("Actors"))
+            movieInfoBuilder.setActors(jsonObject.getString("Actors"));
 
         return movieInfoBuilder;
     }
