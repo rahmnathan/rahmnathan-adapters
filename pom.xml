@@ -10,8 +10,8 @@
     <packaging>pom</packaging>
 
     <properties>
-        <maven.compiler.source>1.10</maven.compiler.source>
-        <maven.compiler.target>1.10</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <camel.version>2.21.0</camel.version>
         <java.ee.api.version>8.0</java.ee.api.version>
@@ -93,16 +93,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
-                <configuration>
-                    <release>10</release>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm</artifactId>
-                        <version>6.1.1</version>
-                    </dependency>
-                </dependencies>
+                <!--<configuration>-->
+                    <!--<release>10</release>-->
+                <!--</configuration>-->
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>org.ow2.asm</groupId>-->
+                        <!--<artifactId>asm</artifactId>-->
+                        <!--<version>6.1.1</version>-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
             </plugin>
         </plugins>
     </build>

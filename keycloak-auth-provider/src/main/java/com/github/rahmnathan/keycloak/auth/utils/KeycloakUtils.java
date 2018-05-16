@@ -20,7 +20,9 @@ public class KeycloakUtils {
 
     public static String getAccessToken(String username, String password, ProducerTemplate producerTemplate) {
         String requestBody = buildLoginInfo(username, password);
-        Map<String, Object> headers = Map.of(Exchange.CONTENT_LENGTH, requestBody.getBytes().length);
+
+        Map<String, Object> headers = new HashMap<>();
+        headers.put(Exchange.CONTENT_LENGTH, requestBody.getBytes().length);
 
         String response = producerTemplate.requestBodyAndHeaders("direct:accesstoken", requestBody, headers, String.class);
 
