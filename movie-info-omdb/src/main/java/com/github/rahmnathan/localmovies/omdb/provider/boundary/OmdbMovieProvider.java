@@ -41,24 +41,9 @@ public class OmdbMovieProvider implements MovieProvider {
     private Optional<byte[]> loadPoster(JSONObject jsonMovieInfo) {
         try {
             String posterUrl = jsonMovieInfo.getString("Poster");
-            Optional<byte[]> poster = dataProvider.loadMoviePoster(posterUrl);
-            return poster.flatMap(this::scaleImage);
+            return dataProvider.loadMoviePoster(posterUrl);
         } catch (JSONException e) {
             logger.error("Failed loading poster", e);
-        }
-
-        return Optional.empty();
-    }
-
-    private Optional<byte[]> scaleImage(byte[] poster) {
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(poster));
-            bufferedImage = Scalr.resize(bufferedImage, Scalr.Method.ULTRA_QUALITY, 200);
-            ImageIO.write(bufferedImage, "jpg", outputStream);
-            outputStream.flush();
-            return Optional.ofNullable(outputStream.toByteArray());
-        } catch (IOException e) {
-            logger.error("Failed scaling image", e);
         }
 
         return Optional.empty();
