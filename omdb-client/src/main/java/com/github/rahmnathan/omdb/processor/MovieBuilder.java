@@ -1,8 +1,8 @@
-package com.github.rahmnathan.localmovies.omdb.processor;
+package com.github.rahmnathan.omdb.processor;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.rahmnathan.localmovies.omdb.data.Movie;
+import com.github.rahmnathan.omdb.data.Movie;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static com.github.rahmnathan.localmovies.omdb.config.OmdbCamelRoutes.*;
+import static com.github.rahmnathan.omdb.config.OmdbCamelRoutes.*;
 
 public class MovieBuilder implements Processor {
     private final Logger logger = LoggerFactory.getLogger(MovieBuilder.class);

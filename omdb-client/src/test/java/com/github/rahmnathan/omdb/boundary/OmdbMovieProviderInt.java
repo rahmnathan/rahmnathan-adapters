@@ -1,6 +1,6 @@
-package com.github.rahmnathan.localmovies.omdb.boundary;
+package com.github.rahmnathan.omdb.boundary;
 
-import com.github.rahmnathan.localmovies.omdb.data.Movie;
+import com.github.rahmnathan.omdb.data.Movie;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Before;
 import org.junit.Test;

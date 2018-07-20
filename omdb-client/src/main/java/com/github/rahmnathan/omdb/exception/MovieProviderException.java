@@ -1,4 +1,4 @@
-package com.github.rahmnathan.localmovies.omdb.exception;
+package com.github.rahmnathan.omdb.exception;
 
 public class MovieProviderException extends Exception {
 

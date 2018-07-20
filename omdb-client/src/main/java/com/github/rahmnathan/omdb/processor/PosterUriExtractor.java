@@ -1,4 +1,4 @@
-package com.github.rahmnathan.localmovies.omdb.processor;
+package com.github.rahmnathan.omdb.processor;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,7 +8,7 @@ import org.apache.camel.Processor;
 
 import java.io.IOException;
 
-import static com.github.rahmnathan.localmovies.omdb.config.OmdbCamelRoutes.OMDB_DATA_PROPERTY;
+import static com.github.rahmnathan.omdb.config.OmdbCamelRoutes.OMDB_DATA_PROPERTY;
 
 public class PosterUriExtractor implements Processor {
     private final ObjectMapper objectMapper = new ObjectMapper();

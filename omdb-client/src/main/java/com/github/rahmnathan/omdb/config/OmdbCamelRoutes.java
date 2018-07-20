@@ -1,7 +1,7 @@
-package com.github.rahmnathan.localmovies.omdb.config;
+package com.github.rahmnathan.omdb.config;
 
-import com.github.rahmnathan.localmovies.omdb.processor.MovieBuilder;
-import com.github.rahmnathan.localmovies.omdb.processor.PosterUriExtractor;
+import com.github.rahmnathan.omdb.processor.MovieBuilder;
+import com.github.rahmnathan.omdb.processor.PosterUriExtractor;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;

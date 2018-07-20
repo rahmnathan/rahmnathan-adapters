@@ -1,8 +1,8 @@
-package com.github.rahmnathan.localmovies.omdb.boundary;
+package com.github.rahmnathan.omdb.boundary;
 
-import com.github.rahmnathan.localmovies.omdb.data.Movie;
-import com.github.rahmnathan.localmovies.omdb.exception.MovieProviderException;
-import com.github.rahmnathan.localmovies.omdb.config.OmdbCamelRoutes;
+import com.github.rahmnathan.omdb.data.Movie;
+import com.github.rahmnathan.omdb.exception.MovieProviderException;
+import com.github.rahmnathan.omdb.config.OmdbCamelRoutes;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
@@ -12,9 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-
-import static com.github.rahmnathan.localmovies.omdb.config.OmdbCamelRoutes.MOVIE_TITLE_PROPERTY;
-import static com.github.rahmnathan.localmovies.omdb.config.OmdbCamelRoutes.OMDB_MOVIE_ROUTE;
 
 public class OmdbMovieProvider {
     private final Logger logger = LoggerFactory.getLogger(OmdbMovieProvider.class.getName());
@@ -30,8 +27,8 @@ public class OmdbMovieProvider {
     public Movie getMovie(String title) throws MovieProviderException {
         logger.debug("Received request for title: {}", title);
 
-        Exchange responseExchange = template.request(OMDB_MOVIE_ROUTE, exchange -> {
-            exchange.setProperty(MOVIE_TITLE_PROPERTY, title);
+        Exchange responseExchange = template.request(OmdbCamelRoutes.OMDB_MOVIE_ROUTE, exchange -> {
+            exchange.setProperty(OmdbCamelRoutes.MOVIE_TITLE_PROPERTY, title);
             exchange.getIn().setHeader(Exchange.HTTP_QUERY, "t=" + URLEncoder.encode(title, StandardCharsets.UTF_8.name()) + "&apikey=" + apiKey);
         });
 
