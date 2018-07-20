@@ -1,4 +1,4 @@
-package com.github.rahmnathan.movie.data;
+package com.github.rahmnathan.localmovies.omdb.provider.data;
 
 import java.io.Serializable;
 
