@@ -28,7 +28,7 @@ public class OmdbMovieProvider {
     }
 
     public Movie getMovie(String title) throws MovieProviderException {
-        logger.info("Received request for title: {}", title);
+        logger.debug("Received request for title: {}", title);
 
         Exchange responseExchange = template.request(OMDB_MOVIE_ROUTE, exchange -> {
             exchange.setProperty(MOVIE_TITLE_PROPERTY, title);
