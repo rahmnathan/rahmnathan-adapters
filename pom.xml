@@ -22,8 +22,7 @@
         <module>google-commute-provider</module>
         <module>weather-provider-api</module>
         <module>open-weather-map-weather-provider</module>
-        <module>movie-info-api</module>
-        <module>movie-info-omdb</module>
+        <module>omdb-client</module>
         <module>google-pushnotification</module>
         <module>keycloak-auth-provider</module>
     </modules>
