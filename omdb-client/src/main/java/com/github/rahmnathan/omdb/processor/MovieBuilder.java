@@ -1,27 +1,22 @@
 package com.github.rahmnathan.omdb.processor;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.rahmnathan.omdb.data.Movie;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.util.Base64;
 
 import static com.github.rahmnathan.omdb.config.OmdbCamelRoutes.*;
 
 public class MovieBuilder implements Processor {
-    private final Logger logger = LoggerFactory.getLogger(MovieBuilder.class);
-    private final ObjectMapper objectMapper = new ObjectMapper();
     private static final String IMDB_RATING_FIELD = "imdbRating";
     private static final String META_SCORE_FIELD = "Metascore";
-    private static final String YEAR_FIELD = "Year";
-    private static final String GENRE_FIELD = "Genre";
-    private static final String PLOT_FIELD = "Plot";
     private static final String ACTORS_FIELD = "Actors";
+    private static final String GENRE_FIELD = "Genre";
+    private static final String YEAR_FIELD = "Year";
+    private static final String PLOT_FIELD = "Plot";
 
     @Override
     public void process(Exchange exchange) {
@@ -34,21 +29,21 @@ public class MovieBuilder implements Processor {
         exchange.getOut().setBody(builder.build());
     }
 
-    private Movie.Builder mapMovieInfo(JsonNode movieJson, String title){
+    private Movie.Builder mapMovieInfo(JsonNode movieJson, String title) {
         Movie.Builder movieInfoBuilder = Movie.Builder.newInstance();
         movieInfoBuilder.setTitle(title);
 
-        if(movieJson.has(IMDB_RATING_FIELD))
+        if (movieJson.has(IMDB_RATING_FIELD))
             movieInfoBuilder.setIMDBRating(movieJson.get(IMDB_RATING_FIELD).asText());
-        if(movieJson.has(META_SCORE_FIELD))
+        if (movieJson.has(META_SCORE_FIELD))
             movieInfoBuilder.setMetaRating(movieJson.get(META_SCORE_FIELD).asText());
-        if(movieJson.has(YEAR_FIELD))
+        if (movieJson.has(YEAR_FIELD))
             movieInfoBuilder.setReleaseYear(movieJson.get(YEAR_FIELD).asText());
-        if(movieJson.has(GENRE_FIELD))
+        if (movieJson.has(GENRE_FIELD))
             movieInfoBuilder.setGenre(movieJson.get(GENRE_FIELD).asText());
-        if(movieJson.has(PLOT_FIELD))
+        if (movieJson.has(PLOT_FIELD))
             movieInfoBuilder.setPlot(movieJson.get(PLOT_FIELD).asText());
-        if(movieJson.has(ACTORS_FIELD))
+        if (movieJson.has(ACTORS_FIELD))
             movieInfoBuilder.setActors(movieJson.get(ACTORS_FIELD).asText());
 
         return movieInfoBuilder;
@@ -56,12 +51,8 @@ public class MovieBuilder implements Processor {
 
     private void mapMoviePoster(Message inMessage, Movie.Builder builder) {
         byte[] poster = inMessage.getBody(byte[].class);
-        if(poster != null){
-            try {
-                builder.setImage(objectMapper.writeValueAsString(poster));
-            } catch (IOException e){
-                logger.error("Failure encoding poster image", e);
-            }
+        if (poster != null) {
+            builder.setImage(Base64.getEncoder().encodeToString(poster));
         }
     }
 }
