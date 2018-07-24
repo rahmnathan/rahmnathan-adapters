@@ -4,10 +4,9 @@ import com.github.rahmnathan.google.pushnotification.config.PushNotificationConf
 import com.github.rahmnathan.google.pushnotification.data.PushNotification;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-public class FirebaseNotificationServiceTest extends CamelTestSupport {
+public class FirebaseNotificationServiceInt extends CamelTestSupport {
     private FirebaseNotificationService notificationService;
 
     @Before
@@ -17,8 +16,7 @@ public class FirebaseNotificationServiceTest extends CamelTestSupport {
     }
 
     @Test
-    @Ignore
-    public void sendNotificationTest() {
+    public void sendNotificationInt() {
         notificationService.sendPushNotification(buildNotification());
     }
 
