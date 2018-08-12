@@ -5,12 +5,32 @@ import java.io.Serializable;
 public class Movie implements Serializable {
     private String image;
     private String title;
-    private String IMDBRating;
+    private String imdbRating;
     private String metaRating;
     private String releaseYear;
     private String actors;
     private String plot;
     private String genre;
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getImdbRating() {
+        return imdbRating;
+    }
+
+    public String getMetaRating() {
+        return metaRating;
+    }
+
+    public String getReleaseYear() {
+        return releaseYear;
+    }
 
     public String getActors() {
         return actors;
@@ -20,33 +40,13 @@ public class Movie implements Serializable {
         return plot;
     }
 
-    public String getReleaseYear(){
-        return releaseYear;
-    }
-
-    public String getTitle(){
-        return title;
-    }
-
-    public String getIMDBRating(){
-        return IMDBRating;
-    }
-
-    public String getMetaRating(){
-        return metaRating;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
     public String getGenre() {
         return genre;
     }
 
     public boolean hasMissingValues(){
-        return image == null || title == null || IMDBRating == null || metaRating == null || actors == null || plot == null
-                || releaseYear == null || genre == null || image.isEmpty() || title.isEmpty() || IMDBRating.isEmpty()
+        return image == null || title == null || imdbRating == null || metaRating == null || actors == null || plot == null
+                || releaseYear == null || genre == null || image.isEmpty() || title.isEmpty() || imdbRating.isEmpty()
                 || metaRating.isEmpty() || releaseYear.isEmpty() || genre.isEmpty() || actors.isEmpty() || plot.isEmpty();
     }
 
@@ -55,7 +55,7 @@ public class Movie implements Serializable {
         return "Movie{" +
                 "image='" + image + '\'' +
                 ", title='" + title + '\'' +
-                ", IMDBRating='" + IMDBRating + '\'' +
+                ", imdbRating='" + imdbRating + '\'' +
                 ", metaRating='" + metaRating + '\'' +
                 ", releaseYear='" + releaseYear + '\'' +
                 ", actors='" + actors + '\'' +
@@ -82,7 +82,7 @@ public class Movie implements Serializable {
         }
 
         public Builder setIMDBRating(String IMDBRating) {
-            movie.IMDBRating = IMDBRating;
+            movie.imdbRating = IMDBRating;
             return this;
         }
 
@@ -126,7 +126,7 @@ public class Movie implements Serializable {
                     .setTitle(title)
                     .setReleaseYear(movie.getReleaseYear())
                     .setMetaRating(movie.getMetaRating())
-                    .setIMDBRating(movie.getIMDBRating())
+                    .setIMDBRating(movie.getImdbRating())
                     .setImage(movie.getImage())
                     .setGenre(movie.getGenre())
                     .setActors(movie.getActors())
@@ -142,7 +142,7 @@ public class Movie implements Serializable {
                     .setTitle(movie.getTitle())
                     .setReleaseYear(movie.getReleaseYear())
                     .setMetaRating(movie.getMetaRating())
-                    .setIMDBRating(movie.getIMDBRating())
+                    .setIMDBRating(movie.getImdbRating())
                     .setPlot(movie.getPlot())
                     .setActors(movie.getActors())
                     .setGenre(movie.getGenre());
