@@ -40,11 +40,16 @@ public class PushNotificationConfig {
                             .end();
 
                     from(GOOGLE_PUSH_NOTIFICATION_ROUTE)
-                            .marshal().json(JsonLibrary.Jackson)
-                            .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
-                            .setHeader(HttpHeaders.AUTHORIZATION, constant("key=" + serverKey))
-                            .setHeader(HttpHeaders.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
-                            .to("https4://fcm.googleapis.com/fcm/send")
+                            .hystrix()
+                                .inheritErrorHandler(true)
+                                .marshal().json(JsonLibrary.Jackson)
+                                .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
+                                .setHeader(HttpHeaders.AUTHORIZATION, constant("key=" + serverKey))
+                                .setHeader(HttpHeaders.CONTENT_TYPE, constant("application/json"))
+                                .to("micrometer:timer:pushnotification-timer?action=start")
+                                .to("https4://fcm.googleapis.com/fcm/send")
+                                .to("micrometer:timer:pushnotification-timer?action=stop")
+                            .endHystrix()
                             .process(new PushNotificationResponseProcessor())
                             .end();
                 }
