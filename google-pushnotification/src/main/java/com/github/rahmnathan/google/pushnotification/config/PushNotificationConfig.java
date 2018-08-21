@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
-import javax.ws.rs.core.MediaType;
 
 @ManagedBean
 public class PushNotificationConfig {
