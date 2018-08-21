@@ -34,12 +34,16 @@ public class OmdbCamelRoutes {
                             .end();
 
                     from(OMDB_MOVIE_ROUTE)
+                            .to("micrometer:timer:omdb-data-timer?action=start")
                             .to(OMDB_URL)
+                            .to("micrometer:timer:omdb-data-timer?action=stop")
                             .process(new PosterUriExtractor())
                             .choice()
                                 .when(exchange -> exchange.getIn().getHeader(Exchange.HTTP_URI) != null)
                                     .setHeader(Exchange.HTTP_METHOD, HttpMethods.GET)
+                                    .to("micrometer:timer:omdb-poster-timer?action=start")
                                     .to(OMDB_URL)
+                                    .to("micrometer:timer:omdb-poster-timer?action=stop")
                             .end()
                             .process(new MovieBuilder())
                             .end();
