@@ -23,30 +23,33 @@ public class MovieBuilder implements Processor {
         Message inMessage = exchange.getIn();
 
         JsonNode movieJson = exchange.getProperty(OMDB_DATA_PROPERTY, JsonNode.class);
-        Movie.Builder builder = mapMovieInfo(movieJson, exchange.getProperty(MOVIE_TITLE_PROPERTY, String.class));
-        mapMoviePoster(inMessage, builder);
 
-        exchange.getOut().setBody(builder.build());
+        Movie.Builder movieBuilder = Movie.Builder.newInstance();
+        movieBuilder.setTitle(exchange.getProperty(MOVIE_TITLE_PROPERTY, String.class));
+
+        if(movieJson != null) {
+            mapMovieInfo(movieJson, movieBuilder);
+            mapMoviePoster(inMessage, movieBuilder);
+        }
+
+        exchange.getOut().setBody(movieBuilder.build());
     }
 
-    private Movie.Builder mapMovieInfo(JsonNode movieJson, String title) {
-        Movie.Builder movieInfoBuilder = Movie.Builder.newInstance();
-        movieInfoBuilder.setTitle(title);
-
+    private Movie.Builder mapMovieInfo(JsonNode movieJson, Movie.Builder builder) {
         if (movieJson.has(IMDB_RATING_FIELD))
-            movieInfoBuilder.setIMDBRating(movieJson.get(IMDB_RATING_FIELD).asText());
+            builder.setIMDBRating(movieJson.get(IMDB_RATING_FIELD).asText());
         if (movieJson.has(META_SCORE_FIELD))
-            movieInfoBuilder.setMetaRating(movieJson.get(META_SCORE_FIELD).asText());
+            builder.setMetaRating(movieJson.get(META_SCORE_FIELD).asText());
         if (movieJson.has(YEAR_FIELD))
-            movieInfoBuilder.setReleaseYear(movieJson.get(YEAR_FIELD).asText());
+            builder.setReleaseYear(movieJson.get(YEAR_FIELD).asText());
         if (movieJson.has(GENRE_FIELD))
-            movieInfoBuilder.setGenre(movieJson.get(GENRE_FIELD).asText());
+            builder.setGenre(movieJson.get(GENRE_FIELD).asText());
         if (movieJson.has(PLOT_FIELD))
-            movieInfoBuilder.setPlot(movieJson.get(PLOT_FIELD).asText());
+            builder.setPlot(movieJson.get(PLOT_FIELD).asText());
         if (movieJson.has(ACTORS_FIELD))
-            movieInfoBuilder.setActors(movieJson.get(ACTORS_FIELD).asText());
+            builder.setActors(movieJson.get(ACTORS_FIELD).asText());
 
-        return movieInfoBuilder;
+        return builder;
     }
 
     private void mapMoviePoster(Message inMessage, Movie.Builder builder) {
