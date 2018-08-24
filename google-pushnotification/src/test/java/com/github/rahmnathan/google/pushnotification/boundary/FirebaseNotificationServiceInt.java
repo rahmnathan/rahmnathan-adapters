@@ -11,7 +11,7 @@ public class FirebaseNotificationServiceInt extends CamelTestSupport {
 
     @Before
     public void initialize(){
-        new PushNotificationConfig(context, "server-key").configureCamelRoutes();
+        new PushNotificationConfig(context).configureCamelRoutes();
         notificationService = new FirebaseNotificationService(template);
     }
 
@@ -23,8 +23,8 @@ public class FirebaseNotificationServiceInt extends CamelTestSupport {
     private PushNotification buildNotification(){
         return PushNotification.Builder.newInstance()
                 .setRecipientToken("device-token")
-                .addData("title", "New Movie!")
-                .addData("body", "Test Body")
+                .setTitle("New Movie!")
+                .setBody("Test Body")
                 .build();
     }
 }

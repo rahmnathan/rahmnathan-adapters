@@ -4,26 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PushNotification {
-    private final String to;
-    private final Map<String, String> notification;
-    private final Map<String, String> data;
+    private final PushNotificationMessage message;
 
-    public PushNotification(String to, Map<String, String> data, Map<String, String> notification) {
-        this.notification = notification;
-        this.data = data;
-        this.to = to;
+    public PushNotification(PushNotificationMessage message) {
+        this.message = message;
     }
 
-    public Map<String, String> getNotification() {
-        return notification;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public Map<String, String> getData() {
-        return data;
+    public PushNotificationMessage getMessage() {
+        return message;
     }
 
     public static class Builder {
@@ -58,7 +46,14 @@ public class PushNotification {
         }
 
         public PushNotification build(){
-            return new PushNotification(recipientToken, data, notification);
+            return new PushNotification(new PushNotificationMessage(recipientToken, data, notification));
         }
+    }
+
+    @Override
+    public String toString() {
+        return "PushNotification{" +
+                "message=" + message +
+                '}';
     }
 }
