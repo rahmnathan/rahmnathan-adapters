@@ -12,7 +12,7 @@ public class FirebaseNotificationServiceInt extends CamelTestSupport {
     @Before
     public void initialize(){
         new PushNotificationConfig(context).configureCamelRoutes();
-        notificationService = new FirebaseNotificationService(template);
+        notificationService = new FirebaseNotificationService(template, context);
     }
 
     @Test

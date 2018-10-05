@@ -13,9 +13,9 @@
         <maven.compiler.source>10</maven.compiler.source>
         <maven.compiler.target>10</maven.compiler.target>
 
-        <camel.version>2.22.0</camel.version>
+        <camel.version>2.22.1</camel.version>
         <java.ee.api.version>8.0</java.ee.api.version>
-        <jackson.version>2.9.2</jackson.version>
+        <jackson.version>2.9.6</jackson.version>
     </properties>
 
     <modules>

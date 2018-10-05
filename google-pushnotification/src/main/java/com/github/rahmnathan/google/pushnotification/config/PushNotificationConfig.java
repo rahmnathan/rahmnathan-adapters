@@ -11,13 +11,10 @@ import org.apache.http.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.ManagedBean;
-import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collections;
 
-@ManagedBean
 public class PushNotificationConfig {
     private final Logger logger = LoggerFactory.getLogger(PushNotificationConfig.class.getName());
     public static final String GOOGLE_PUSH_NOTIFICATION_ROUTE = "seda:pushnotification";
@@ -28,7 +25,6 @@ public class PushNotificationConfig {
         this.camelContext = camelContext;
     }
 
-    @PostConstruct
     public void configureCamelRoutes(){
         try {
             googleCredential = GoogleCredential
