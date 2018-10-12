@@ -42,6 +42,9 @@ public class PushNotificationConfig {
 
                     from(GOOGLE_PUSH_NOTIFICATION_ROUTE)
                             .hystrix()
+                                .hystrixConfiguration()
+                                    .executionTimeoutInMilliseconds(5000)
+                                .end()
                                 .inheritErrorHandler(true)
                                 .marshal().json(JsonLibrary.Jackson)
                                 .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
