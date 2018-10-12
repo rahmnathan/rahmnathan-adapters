@@ -22,7 +22,7 @@ public class FirebaseNotificationServiceInt extends CamelTestSupport {
 
     private PushNotification buildNotification(){
         return PushNotification.Builder.newInstance()
-                .setRecipientToken("device-token")
+                .setTopic("device-token")
                 .setTitle("New Movie!")
                 .setBody("Test Body")
                 .build();

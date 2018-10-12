@@ -17,14 +17,14 @@ public class PushNotification {
     public static class Builder {
         private Map<String, String> notification = new HashMap<>();
         private Map<String, String> data = new HashMap<>();
-        private String recipientToken;
+        private String topic;
 
         public static Builder newInstance(){
             return new Builder();
         }
 
-        public Builder setRecipientToken(String recipientToken) {
-            this.recipientToken = recipientToken;
+        public Builder setTopic(String topic) {
+            this.topic = topic;
             return this;
         }
 
@@ -46,7 +46,7 @@ public class PushNotification {
         }
 
         public PushNotification build(){
-            return new PushNotification(new PushNotificationMessage(recipientToken, data, notification));
+            return new PushNotification(new PushNotificationMessage(topic, data, notification));
         }
     }
 
