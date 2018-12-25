@@ -16,20 +16,15 @@ import java.util.Collections;
 
 public class PushNotificationConfig {
     private final Logger logger = LoggerFactory.getLogger(PushNotificationConfig.class.getName());
-    public static final String GOOGLE_PUSH_NOTIFICATION_ROUTE = "seda:pushnotification";
-    private GoogleCredential googleCredential;
+    public static final String GOOGLE_PUSH_NOTIFICATION_ROUTE = "direct:pushnotification";
     private final CamelContext camelContext;
 
-    public PushNotificationConfig(CamelContext camelContext){
+    public PushNotificationConfig(CamelContext camelContext) {
         this.camelContext = camelContext;
     }
 
-    public void configureCamelRoutes(){
+    public void configureCamelRoutes() {
         try {
-            googleCredential = GoogleCredential
-                    .fromStream(new FileInputStream("/opt/localmovie/secrets/localmovie-firebase-key.json"))
-                    .createScoped(Collections.singleton("https://www.googleapis.com/auth/firebase.messaging"));
-
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
                 public void configure() {
@@ -58,18 +53,24 @@ public class PushNotificationConfig {
                             .end();
                 }
             });
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("Failure adding routes to Camel context", e);
         }
     }
 
-    private String buildAuthorizationHeader(){
+    private String buildAuthorizationHeader() {
         try {
+            GoogleCredential googleCredential = GoogleCredential
+                    .fromStream(new FileInputStream("/opt/localmovie/secrets/localmovie-firebase-key.json"))
+                    .createScoped(Collections.singleton("https://www.googleapis.com/auth/firebase.messaging"));
+
             googleCredential.refreshToken();
+
             return "Bearer " + googleCredential.getAccessToken();
         } catch (IOException e){
-            logger.error("Failure getting access token for Firebase.", e);
+            logger.error("Failure acquiring AccessToken.", e);
             return "";
         }
     }
+
 }
