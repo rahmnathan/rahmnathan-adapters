@@ -7,5 +7,4 @@ module google.pushnotification {
     requires google.api.client;
     requires camel.http.common;
     requires camel.http4;
-    requires httpcore;
 }

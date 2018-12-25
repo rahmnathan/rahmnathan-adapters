@@ -7,7 +7,6 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.http4.HttpMethods;
 import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.camel.model.dataformat.JsonLibrary;
-import org.apache.http.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +47,8 @@ public class PushNotificationConfig {
                                 .inheritErrorHandler(true)
                                 .marshal().json(JsonLibrary.Jackson)
                                 .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
-                                .process(exchange -> exchange.setProperty("accessToken", getAccessToken()))
-                                .setHeader(HttpHeaders.AUTHORIZATION, simple("Bearer ${property.accessToken}"))
-                                .setHeader(HttpHeaders.CONTENT_TYPE, constant("application/json"))
+                                .setHeader("Authorization", () -> buildAuthorizationHeader())
+                                .setHeader("Content-Type", constant("application/json"))
                                 .setHeader(Exchange.HTTP_PATH, constant("/v1/projects/api-9073148299832435984-82417/messages:send"))
                                 .to("micrometer:timer:pushnotification-timer?action=start")
                                 .to("https4://fcm.googleapis.com")
@@ -65,10 +63,10 @@ public class PushNotificationConfig {
         }
     }
 
-    private String getAccessToken(){
+    private String buildAuthorizationHeader(){
         try {
             googleCredential.refreshToken();
-            return googleCredential.getAccessToken();
+            return "Bearer " + googleCredential.getAccessToken();
         } catch (IOException e){
             logger.error("Failure getting access token for Firebase.", e);
             return "";
