@@ -16,7 +16,7 @@ import java.util.Collections;
 
 public class PushNotificationConfig {
     private final Logger logger = LoggerFactory.getLogger(PushNotificationConfig.class.getName());
-    public static final String GOOGLE_PUSH_NOTIFICATION_ROUTE = "direct:pushnotification";
+    public static final String GOOGLE_PUSH_NOTIFICATION_ROUTE = "seda:pushnotification";
     private final CamelContext camelContext;
 
     public PushNotificationConfig(CamelContext camelContext) {
