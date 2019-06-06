@@ -15,7 +15,7 @@
 
         <camel.version>2.23.1</camel.version>
         <java.ee.api.version>8.0</java.ee.api.version>
-        <jackson.version>2.9.8</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
     </properties>
 
     <modules>
