@@ -2,7 +2,8 @@ package com.github.rahmnathan.omdb.data;
 
 import java.io.Serializable;
 
-public class Movie implements Serializable {
+public class Media implements Serializable {
+    private MediaType mediaType;
     private String image;
     private String title;
     private String imdbRating;
@@ -11,6 +12,15 @@ public class Movie implements Serializable {
     private String actors;
     private String plot;
     private String genre;
+    private Integer number;
+
+    public MediaType getMediaType(){
+        return mediaType;
+    }
+
+    public Integer getNumber(){
+        return number;
+    }
 
     public String getImage() {
         return image;
@@ -52,7 +62,9 @@ public class Movie implements Serializable {
 
     @Override
     public String toString() {
-        return "Movie{" +
+        return "Media{" +
+                "mediaType=" + mediaType +
+                ", image='" + image + '\'' +
                 ", title='" + title + '\'' +
                 ", imdbRating='" + imdbRating + '\'' +
                 ", metaRating='" + metaRating + '\'' +
@@ -60,93 +72,108 @@ public class Movie implements Serializable {
                 ", actors='" + actors + '\'' +
                 ", plot='" + plot + '\'' +
                 ", genre='" + genre + '\'' +
+                ", number=" + number +
                 '}';
     }
 
     public static class Builder {
-        private Movie movie = new Movie();
+        private Media media = new Media();
 
         public static Builder newInstance(){
             return new Builder();
         }
 
         public Builder setGenre(String genre) {
-            movie.genre = genre;
+            media.genre = genre;
             return this;
         }
 
         public Builder setTitle(String title) {
-            movie.title = title;
+            media.title = title;
             return this;
         }
 
         public Builder setIMDBRating(String IMDBRating) {
-            movie.imdbRating = IMDBRating;
+            media.imdbRating = IMDBRating;
             return this;
         }
 
         public Builder setMetaRating(String metaRating) {
-            movie.metaRating = metaRating;
+            media.metaRating = metaRating;
             return this;
         }
 
         public Builder setImage(String image) {
-            movie.image = image;
+            media.image = image;
             return this;
         }
 
         public Builder setReleaseYear(String releaseYear) {
-            movie.releaseYear = releaseYear;
+            media.releaseYear = releaseYear;
             return this;
         }
 
         public Builder setPlot(String plot){
-            movie.plot = plot;
+            media.plot = plot;
             return this;
         }
 
         public Builder setActors(String actors){
-            movie.actors = actors;
+            media.actors = actors;
             return this;
         }
 
-        public Movie build(){
-            Movie result = movie;
-            movie = new Movie();
+        public Builder setNumber(Integer number){
+            media.number = number;
+            return this;
+        }
+
+        public Builder setMediaType(MediaType mediaType){
+            media.mediaType = mediaType;
+            return this;
+        }
+
+        public Media build(){
+            Media result = media;
+            media = new Media();
 
             return result;
         }
 
-        public static Movie copyWithNewTitle(Movie movie, String title){
-            if(movie == null)
-                return Builder.newInstance().setTitle(title).build();
+        public static Media copyWithNewTitle(Media media, String title, Integer number){
+            if(media == null)
+                return Builder.newInstance().setTitle(title).setNumber(number).build();
 
             return Builder.newInstance()
                     .setTitle(title)
-                    .setReleaseYear(movie.getReleaseYear())
-                    .setMetaRating(movie.getMetaRating())
-                    .setIMDBRating(movie.getImdbRating())
-                    .setImage(movie.getImage())
-                    .setGenre(movie.getGenre())
-                    .setActors(movie.getActors())
-                    .setPlot(movie.getPlot())
+                    .setReleaseYear(media.getReleaseYear())
+                    .setMetaRating(media.getMetaRating())
+                    .setIMDBRating(media.getImdbRating())
+                    .setImage(media.getImage())
+                    .setGenre(media.getGenre())
+                    .setActors(media.getActors())
+                    .setPlot(media.getPlot())
+                    .setNumber(number)
+                    .setMediaType(media.getMediaType())
                     .build();
         }
 
-        public static Movie copyWithNoImage(Movie movie){
-            if(movie == null)
+        public static Media copyWithNoImage(Media media){
+            if(media == null)
                 return Builder.newInstance().build();
 
             Builder builder = Builder.newInstance()
-                    .setTitle(movie.getTitle())
-                    .setReleaseYear(movie.getReleaseYear())
-                    .setMetaRating(movie.getMetaRating())
-                    .setIMDBRating(movie.getImdbRating())
-                    .setPlot(movie.getPlot())
-                    .setActors(movie.getActors())
-                    .setGenre(movie.getGenre());
+                    .setTitle(media.getTitle())
+                    .setReleaseYear(media.getReleaseYear())
+                    .setMetaRating(media.getMetaRating())
+                    .setIMDBRating(media.getImdbRating())
+                    .setPlot(media.getPlot())
+                    .setActors(media.getActors())
+                    .setNumber(media.getNumber())
+                    .setMediaType(media.getMediaType())
+                    .setGenre(media.getGenre());
 
-            if(movie.getImage() == null || movie.getImage().equals("")){
+            if(media.getImage() == null || media.getImage().equals("")){
                 builder.setImage("noImage");
             } else {
                 builder.setImage("");

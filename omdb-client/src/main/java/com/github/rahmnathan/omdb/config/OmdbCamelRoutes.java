@@ -1,6 +1,7 @@
 package com.github.rahmnathan.omdb.config;
 
-import com.github.rahmnathan.omdb.processor.MovieBuilder;
+import com.github.rahmnathan.omdb.data.MediaType;
+import com.github.rahmnathan.omdb.processor.MediaBuilder;
 import com.github.rahmnathan.omdb.processor.PosterUriExtractor;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
@@ -10,12 +11,19 @@ import org.apache.camel.http.common.HttpOperationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeoutException;
+
 public class OmdbCamelRoutes {
     private final Logger logger = LoggerFactory.getLogger(OmdbCamelRoutes.class.getName());
     public static final String OMDB_MOVIE_ROUTE = "direct:omdbMovie";
+    public static final String OMDB_SEASON_ROUTE = "direct:omdbSeason";
+    public static final String OMDB_EPISODE_ROUTE = "direct:omdbEpisode";
+    public static final String OMDB_BASE_ROUTE = "direct:omdbBase";
+
     private static final String OMDB_URL = "https4://www.omdbapi.com";
-    public static final String MOVIE_TITLE_PROPERTY = "movieTitle";
+    public static final String MEDIA_TITLE_PROPERTY = "movieTitle";
     public static final String OMDB_DATA_PROPERTY = "omdbData";
+    public static final String NUMBER_PROPERTY = "numberProperty";
     private final CamelContext camelContext;
 
     public OmdbCamelRoutes(CamelContext camelContext){
@@ -27,18 +35,34 @@ public class OmdbCamelRoutes {
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
                 public void configure() {
-                    onException(HttpOperationFailedException.class)
+                    onException(HttpOperationFailedException.class, TimeoutException.class)
                             .useExponentialBackOff()
                             .redeliveryDelay(500)
                             .maximumRedeliveries(3)
                             .end();
 
+                    from(OMDB_SEASON_ROUTE)
+                            .to(OMDB_BASE_ROUTE)
+                            .process(new MediaBuilder(MediaType.SEASON))
+                            .end();
+
+                    from(OMDB_EPISODE_ROUTE)
+                            .to(OMDB_BASE_ROUTE)
+                            .process(new MediaBuilder(MediaType.EPISODE))
+                            .end();
+
                     from(OMDB_MOVIE_ROUTE)
+                            .to(OMDB_BASE_ROUTE)
+                            .process(new MediaBuilder(MediaType.MOVIE))
+                            .end();
+
+                    from(OMDB_BASE_ROUTE)
                             .hystrix()
                                 .inheritErrorHandler(true)
                                 .to("micrometer:timer:omdb-data-timer?action=start")
                                 .to(OMDB_URL)
                                 .to("micrometer:timer:omdb-data-timer?action=stop")
+                                .removeHeader(Exchange.HTTP_QUERY)
                                 .process(new PosterUriExtractor())
                                 .choice()
                                     .when(exchange -> exchange.getIn().getHeader(Exchange.HTTP_URI) != null)
@@ -48,7 +72,6 @@ public class OmdbCamelRoutes {
                                         .to("micrometer:timer:omdb-poster-timer?action=stop")
                                 .end()
                             .endHystrix()
-                            .process(new MovieBuilder())
                             .end();
                 }
             });
