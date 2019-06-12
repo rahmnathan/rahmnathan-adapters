@@ -68,7 +68,11 @@ public class OmdbCamelRoutes {
                                 .when(exchange -> exchange.getIn().getHeader(Exchange.HTTP_URI) != null)
                                     .setHeader(Exchange.HTTP_METHOD, HttpMethods.GET)
                                     .to("micrometer:timer:omdb-poster-timer?action=start")
-                                    .to(OMDB_URL)
+                                    .doTry()
+                                        .to(OMDB_URL)
+                                    .doCatch(HttpOperationFailedException.class)
+                                        .log(exceptionMessage().toString())
+                                    .endDoTry()
                                     .to("micrometer:timer:omdb-poster-timer?action=stop")
                             .end()
                             .end();
