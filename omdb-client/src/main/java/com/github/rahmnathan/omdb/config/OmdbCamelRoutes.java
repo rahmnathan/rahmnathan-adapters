@@ -36,10 +36,11 @@ public class OmdbCamelRoutes {
                 @Override
                 public void configure() {
                     onException(HttpOperationFailedException.class, TimeoutException.class)
+                            .to("micrometer:timer:omdb-poster-timer?action=stop")
+                            .to("micrometer:timer:omdb-data-timer?action=stop")
                             .useExponentialBackOff()
                             .redeliveryDelay(500)
                             .maximumRedeliveries(3)
-                            .to("micrometer:timer:omdb-poster-timer?action=stop")
                             .end();
 
                     from(OMDB_SEASON_ROUTE)
