@@ -39,6 +39,7 @@ public class OmdbCamelRoutes {
                             .useExponentialBackOff()
                             .redeliveryDelay(500)
                             .maximumRedeliveries(3)
+                            .to("micrometer:timer:omdb-poster-timer?action=stop")
                             .end();
 
                     from(OMDB_SEASON_ROUTE)
