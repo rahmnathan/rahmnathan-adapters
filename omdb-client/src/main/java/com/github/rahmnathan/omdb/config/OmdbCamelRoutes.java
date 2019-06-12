@@ -59,7 +59,6 @@ public class OmdbCamelRoutes {
                             .end();
 
                     from(OMDB_BASE_ROUTE)
-                            .inheritErrorHandler(true)
                             .to("micrometer:timer:omdb-data-timer?action=start")
                             .to(OMDB_URL)
                             .to("micrometer:timer:omdb-data-timer?action=stop")

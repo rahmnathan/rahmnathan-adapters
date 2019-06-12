@@ -50,7 +50,7 @@ public class MediaBuilder implements Processor {
                 mediaBuilder.setTitle(mediaJson.get("Title").asText());
             } else if(MediaType.EPISODE == mediaType) {
                 mediaBuilder.setTitle("Episode " + number);
-            } else if(MediaType.SEASON == mediaType){
+            } else {
                 mediaBuilder.setTitle("Season " + number);
             }
         }
