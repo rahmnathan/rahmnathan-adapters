@@ -140,9 +140,13 @@ public class Media implements Serializable {
             return result;
         }
 
-        public static Media copyWithNewTitle(Media media, String title, Integer number){
+        public static Media copyWithNewTitleNumberAndType(Media media, String title, Integer number, MediaType mediaType){
             if(media == null)
-                return Builder.newInstance().setTitle(title).setNumber(number).build();
+                return Builder.newInstance()
+                        .setTitle(title)
+                        .setNumber(number)
+                        .setMediaType(mediaType)
+                        .build();
 
             return Builder.newInstance()
                     .setTitle(title)
@@ -154,7 +158,7 @@ public class Media implements Serializable {
                     .setActors(media.getActors())
                     .setPlot(media.getPlot())
                     .setNumber(number)
-                    .setMediaType(media.getMediaType())
+                    .setMediaType(mediaType)
                     .build();
         }
 
