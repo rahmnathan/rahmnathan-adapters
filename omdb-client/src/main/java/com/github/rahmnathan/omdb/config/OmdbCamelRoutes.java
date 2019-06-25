@@ -65,7 +65,10 @@ public class OmdbCamelRoutes {
                             .removeHeader(Exchange.HTTP_QUERY)
                             .process(new PosterUriExtractor())
                             .choice()
-                                .when(exchange -> exchange.getIn().getHeader(Exchange.HTTP_URI) != null)
+                                .when(exchange -> {
+                                        String posterUri = exchange.getIn().getHeader(Exchange.HTTP_URI, String.class);
+                                        return posterUri != null && !posterUri.equalsIgnoreCase("n/a");
+                                    })
                                     .setHeader(Exchange.HTTP_METHOD, HttpMethods.GET)
                                     .to("micrometer:timer:omdb-poster-timer?action=start")
                                     .doTry()
