@@ -13,9 +13,9 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <camel.version>2.24.0</camel.version>
+        <camel.version>3.0.0-M4</camel.version>
         <java.ee.api.version>8.0</java.ee.api.version>
-        <jackson.version>2.9.9</jackson.version>
+        <jackson.version>2.10.0</jackson.version>
     </properties>
 
     <modules>
@@ -48,6 +48,11 @@
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-http4</artifactId>
+                <version>${camel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-core</artifactId>
                 <version>${camel.version}</version>
             </dependency>
             <dependency>

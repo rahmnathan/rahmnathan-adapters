@@ -46,7 +46,7 @@ public class PushNotificationConfig {
                                 .setHeader("Content-Type", constant("application/json"))
                                 .setHeader(Exchange.HTTP_PATH, constant("/v1/projects/api-9073148299832435984-82417/messages:send"))
                                 .to("micrometer:timer:pushnotification-timer?action=start")
-                                .to("https4://fcm.googleapis.com")
+                                .to("https://fcm.googleapis.com")
                                 .to("micrometer:timer:pushnotification-timer?action=stop")
                             .endHystrix()
                             .process(new PushNotificationResponseProcessor())

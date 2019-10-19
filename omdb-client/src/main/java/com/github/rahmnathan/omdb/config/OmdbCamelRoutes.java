@@ -6,7 +6,7 @@ import com.github.rahmnathan.omdb.processor.PosterUriExtractor;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.http4.HttpMethods;
+import org.apache.camel.http.common.HttpMethods;
 import org.apache.camel.http.common.HttpOperationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class OmdbCamelRoutes {
     public static final String OMDB_EPISODE_ROUTE = "direct:omdbEpisode";
     public static final String OMDB_BASE_ROUTE = "direct:omdbBase";
 
-    private static final String OMDB_URL = "https4://www.omdbapi.com";
+    private static final String OMDB_URL = "https://www.omdbapi.com";
     public static final String MEDIA_TITLE_PROPERTY = "movieTitle";
     public static final String OMDB_DATA_PROPERTY = "omdbData";
     public static final String NUMBER_PROPERTY = "numberProperty";
@@ -38,6 +38,7 @@ public class OmdbCamelRoutes {
                     onException(HttpOperationFailedException.class, TimeoutException.class)
                             .to("micrometer:timer:omdb-poster-timer?action=stop")
                             .to("micrometer:timer:omdb-data-timer?action=stop")
+                            .onWhen(exchange -> exchange.getException(HttpOperationFailedException.class).getStatusCode() >= 500)
                             .useExponentialBackOff()
                             .redeliveryDelay(500)
                             .maximumRedeliveries(3)
@@ -69,7 +70,7 @@ public class OmdbCamelRoutes {
                                         String posterUri = exchange.getIn().getHeader(Exchange.HTTP_URI, String.class);
                                         return posterUri != null && !posterUri.equalsIgnoreCase("n/a");
                                     })
-                                    .setHeader(Exchange.HTTP_METHOD, HttpMethods.GET)
+                                    .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
                                     .to("micrometer:timer:omdb-poster-timer?action=start")
                                     .doTry()
                                         .to(OMDB_URL)
