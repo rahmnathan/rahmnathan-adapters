@@ -14,37 +14,37 @@
         <maven.compiler.target>11</maven.compiler.target>
 
         <camel.version>3.0.0-M4</camel.version>
-        <java.ee.api.version>8.0</java.ee.api.version>
         <jackson.version>2.10.0</jackson.version>
     </properties>
 
     <modules>
-        <module>google-commute-provider</module>
-        <module>weather-provider-api</module>
-        <module>open-weather-map-weather-provider</module>
         <module>omdb-client</module>
         <module>google-pushnotification</module>
-        <module>keycloak-auth-provider</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-                <scope>test</scope>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.json</groupId>
-                <artifactId>json</artifactId>
-                <version>20170516</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.rahmnathan.utils</groupId>
-                <artifactId>http-client</artifactId>
-                <version>1</version>
-            </dependency>
+
+            <!-- Camel -->
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-http4</artifactId>
@@ -67,30 +67,22 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>camel-test</artifactId>
-                <version>${camel.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-api</artifactId>
-                <version>${java.ee.api.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring-boot-starter</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
                 <artifactId>camel-jackson</artifactId>
                 <version>${camel.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Test -->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-test</artifactId>
+                <version>${camel.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>

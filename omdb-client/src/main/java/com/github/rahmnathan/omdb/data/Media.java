@@ -1,7 +1,12 @@
 package com.github.rahmnathan.omdb.data;
 
+import lombok.Builder;
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
+@Builder
 public class Media implements Serializable {
     private MediaType mediaType;
     private String image;
@@ -14,176 +19,55 @@ public class Media implements Serializable {
     private String genre;
     private Integer number;
 
-    public MediaType getMediaType(){
-        return mediaType;
-    }
-
-    public Integer getNumber(){
-        return number;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getImdbRating() {
-        return imdbRating;
-    }
-
-    public String getMetaRating() {
-        return metaRating;
-    }
-
-    public String getReleaseYear() {
-        return releaseYear;
-    }
-
-    public String getActors() {
-        return actors;
-    }
-
-    public String getPlot() {
-        return plot;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public boolean hasMissingValues(){
+    public boolean hasMissingValues() {
         return image == null || title == null || imdbRating == null || metaRating == null || actors == null || plot == null
                 || releaseYear == null || genre == null || image.isEmpty() || title.isEmpty() || imdbRating.isEmpty()
                 || metaRating.isEmpty() || releaseYear.isEmpty() || genre.isEmpty() || actors.isEmpty() || plot.isEmpty();
     }
 
-    @Override
-    public String toString() {
-        return "Media{" +
-                "mediaType=" + mediaType +
-                ", image='" + image + '\'' +
-                ", title='" + title + '\'' +
-                ", imdbRating='" + imdbRating + '\'' +
-                ", metaRating='" + metaRating + '\'' +
-                ", releaseYear='" + releaseYear + '\'' +
-                ", actors='" + actors + '\'' +
-                ", plot='" + plot + '\'' +
-                ", genre='" + genre + '\'' +
-                ", number=" + number +
-                '}';
+    public static Media copyWithNewTitleNumberAndType(Media media, String title, Integer number, MediaType mediaType) {
+        if (media == null)
+            return Media.builder()
+                    .title(title)
+                    .number(number)
+                    .mediaType(mediaType)
+                    .build();
+
+        return Media.builder()
+                .title(title)
+                .releaseYear(media.getReleaseYear())
+                .metaRating(media.getMetaRating())
+                .imdbRating(media.getImdbRating())
+                .image(media.getImage())
+                .genre(media.getGenre())
+                .actors(media.getActors())
+                .plot(media.getPlot())
+                .number(number)
+                .mediaType(mediaType)
+                .build();
     }
 
-    public static class Builder {
-        private Media media = new Media();
+    public static Media copyWithNoImage(Media media) {
+        if (media == null)
+            return Media.builder().build();
 
-        public static Builder newInstance(){
-            return new Builder();
+        MediaBuilder builder = Media.builder()
+                .title(media.getTitle())
+                .releaseYear(media.getReleaseYear())
+                .metaRating(media.getMetaRating())
+                .imdbRating(media.getImdbRating())
+                .plot(media.getPlot())
+                .actors(media.getActors())
+                .number(media.getNumber())
+                .mediaType(media.getMediaType())
+                .genre(media.getGenre());
+
+        if (media.getImage() == null || media.getImage().equals("")) {
+            builder.image("noImage");
+        } else {
+            builder.image("");
         }
 
-        public Builder setGenre(String genre) {
-            media.genre = genre;
-            return this;
-        }
-
-        public Builder setTitle(String title) {
-            media.title = title;
-            return this;
-        }
-
-        public Builder setIMDBRating(String IMDBRating) {
-            media.imdbRating = IMDBRating;
-            return this;
-        }
-
-        public Builder setMetaRating(String metaRating) {
-            media.metaRating = metaRating;
-            return this;
-        }
-
-        public Builder setImage(String image) {
-            media.image = image;
-            return this;
-        }
-
-        public Builder setReleaseYear(String releaseYear) {
-            media.releaseYear = releaseYear;
-            return this;
-        }
-
-        public Builder setPlot(String plot){
-            media.plot = plot;
-            return this;
-        }
-
-        public Builder setActors(String actors){
-            media.actors = actors;
-            return this;
-        }
-
-        public Builder setNumber(Integer number){
-            media.number = number;
-            return this;
-        }
-
-        public Builder setMediaType(MediaType mediaType){
-            media.mediaType = mediaType;
-            return this;
-        }
-
-        public Media build(){
-            Media result = media;
-            media = new Media();
-
-            return result;
-        }
-
-        public static Media copyWithNewTitleNumberAndType(Media media, String title, Integer number, MediaType mediaType){
-            if(media == null)
-                return Builder.newInstance()
-                        .setTitle(title)
-                        .setNumber(number)
-                        .setMediaType(mediaType)
-                        .build();
-
-            return Builder.newInstance()
-                    .setTitle(title)
-                    .setReleaseYear(media.getReleaseYear())
-                    .setMetaRating(media.getMetaRating())
-                    .setIMDBRating(media.getImdbRating())
-                    .setImage(media.getImage())
-                    .setGenre(media.getGenre())
-                    .setActors(media.getActors())
-                    .setPlot(media.getPlot())
-                    .setNumber(number)
-                    .setMediaType(mediaType)
-                    .build();
-        }
-
-        public static Media copyWithNoImage(Media media){
-            if(media == null)
-                return Builder.newInstance().build();
-
-            Builder builder = Builder.newInstance()
-                    .setTitle(media.getTitle())
-                    .setReleaseYear(media.getReleaseYear())
-                    .setMetaRating(media.getMetaRating())
-                    .setIMDBRating(media.getImdbRating())
-                    .setPlot(media.getPlot())
-                    .setActors(media.getActors())
-                    .setNumber(media.getNumber())
-                    .setMediaType(media.getMediaType())
-                    .setGenre(media.getGenre());
-
-            if(media.getImage() == null || media.getImage().equals("")){
-                builder.setImage("noImage");
-            } else {
-                builder.setImage("");
-            }
-
-            return builder.build();
-        }
+        return builder.build();
     }
 }

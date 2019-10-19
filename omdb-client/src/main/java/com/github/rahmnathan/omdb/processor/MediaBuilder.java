@@ -32,9 +32,9 @@ public class MediaBuilder implements Processor {
 
         JsonNode mediaJson = exchange.getProperty(OMDB_DATA_PROPERTY, JsonNode.class);
 
-        Media.Builder mediaBuilder = Media.Builder.newInstance();
-        mediaBuilder.setTitle(exchange.getProperty(MEDIA_TITLE_PROPERTY, String.class));
-        mediaBuilder.setMediaType(mediaType);
+        Media.MediaBuilder mediaBuilder = Media.builder();
+        mediaBuilder.title(exchange.getProperty(MEDIA_TITLE_PROPERTY, String.class));
+        mediaBuilder.mediaType(mediaType);
 
         if(mediaJson == null || mediaJson.get("Response").asText().equalsIgnoreCase("False")) {
             throw new MediaNotFoundException("Media not found.");
@@ -45,38 +45,38 @@ public class MediaBuilder implements Processor {
 
         if(mediaType == MediaType.EPISODE || mediaType == MediaType.SEASON){
             Integer number = exchange.getProperty(NUMBER_PROPERTY, Integer.class);
-            mediaBuilder.setNumber(number);
+            mediaBuilder.number(number);
             if(mediaJson.has("Title")){
-                mediaBuilder.setTitle(mediaJson.get("Title").asText());
+                mediaBuilder.title(mediaJson.get("Title").asText());
             } else if(MediaType.EPISODE == mediaType) {
-                mediaBuilder.setTitle("Episode " + number);
+                mediaBuilder.title("Episode " + number);
             } else {
-                mediaBuilder.setTitle("Season " + number);
+                mediaBuilder.title("Season " + number);
             }
         }
 
         exchange.getOut().setBody(mediaBuilder.build());
     }
 
-    private void mapMovieInfo(JsonNode mediaJson, Media.Builder builder) {
+    private void mapMovieInfo(JsonNode mediaJson, Media.MediaBuilder builder) {
         if (mediaJson.has(IMDB_RATING_FIELD))
-            builder.setIMDBRating(mediaJson.get(IMDB_RATING_FIELD).asText());
+            builder.imdbRating(mediaJson.get(IMDB_RATING_FIELD).asText());
         if (mediaJson.has(META_SCORE_FIELD))
-            builder.setMetaRating(mediaJson.get(META_SCORE_FIELD).asText());
+            builder.metaRating(mediaJson.get(META_SCORE_FIELD).asText());
         if (mediaJson.has(YEAR_FIELD))
-            builder.setReleaseYear(mediaJson.get(YEAR_FIELD).asText());
+            builder.releaseYear(mediaJson.get(YEAR_FIELD).asText());
         if (mediaJson.has(GENRE_FIELD))
-            builder.setGenre(mediaJson.get(GENRE_FIELD).asText());
+            builder.genre(mediaJson.get(GENRE_FIELD).asText());
         if (mediaJson.has(PLOT_FIELD))
-            builder.setPlot(mediaJson.get(PLOT_FIELD).asText());
+            builder.plot(mediaJson.get(PLOT_FIELD).asText());
         if (mediaJson.has(ACTORS_FIELD))
-            builder.setActors(mediaJson.get(ACTORS_FIELD).asText());
+            builder.actors(mediaJson.get(ACTORS_FIELD).asText());
     }
 
-    private void mapMoviePoster(Message inMessage, Media.Builder builder) {
+    private void mapMoviePoster(Message inMessage, Media.MediaBuilder builder) {
         byte[] poster = inMessage.getBody(byte[].class);
         if (poster != null) {
-            builder.setImage(Base64.getEncoder().encodeToString(poster));
+            builder.image(Base64.getEncoder().encodeToString(poster));
         }
     }
 }
