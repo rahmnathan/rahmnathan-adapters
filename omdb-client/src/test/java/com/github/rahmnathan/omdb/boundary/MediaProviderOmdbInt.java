@@ -7,14 +7,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OmdbMediaProviderInt extends CamelTestSupport {
-    private final Logger logger = LoggerFactory.getLogger(OmdbMediaProviderInt.class);
+public class MediaProviderOmdbInt extends CamelTestSupport {
+    private final Logger logger = LoggerFactory.getLogger(MediaProviderOmdbInt.class);
     private final String apiKey = "a825746e";
-    private OmdbMediaProvider movieProvider;
+    private MediaProviderOmdb movieProvider;
 
     @Before
     public void initialize(){
-        this.movieProvider = new OmdbMediaProvider(context, template, apiKey);
+        this.movieProvider = new MediaProviderOmdb(context, template, apiKey);
     }
 
     @Test

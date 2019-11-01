@@ -11,8 +11,6 @@ import org.apache.camel.http.common.HttpOperationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.TimeoutException;
-
 public class OmdbCamelRoutes {
     private final Logger logger = LoggerFactory.getLogger(OmdbCamelRoutes.class.getName());
     public static final String OMDB_MOVIE_ROUTE = "direct:omdbMovie";
@@ -35,7 +33,7 @@ public class OmdbCamelRoutes {
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
                 public void configure() {
-                    onException(HttpOperationFailedException.class, TimeoutException.class)
+                    onException(HttpOperationFailedException.class)
                             .to("micrometer:timer:omdb-poster-timer?action=stop")
                             .to("micrometer:timer:omdb-data-timer?action=stop")
                             .onWhen(exchange -> exchange.getException(HttpOperationFailedException.class).getStatusCode() >= 500)

@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-public class OmdbMediaProvider {
-    private final Logger logger = LoggerFactory.getLogger(OmdbMediaProvider.class.getName());
+public class MediaProviderOmdb implements MediaProvider {
+    private final Logger logger = LoggerFactory.getLogger(MediaProviderOmdb.class.getName());
     private final ProducerTemplate template;
     private final String apiKey;
 
-    public OmdbMediaProvider(CamelContext context, ProducerTemplate template, String apiKey) {
+    public MediaProviderOmdb(CamelContext context, ProducerTemplate template, String apiKey) {
         new OmdbCamelRoutes(context).initialize();
         this.template = template;
         this.apiKey = apiKey;
