@@ -1,9 +1,9 @@
 package com.github.rahmnathan.omdb.boundary;
 
 import com.github.rahmnathan.omdb.data.Media;
-import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.camel.test.junit5.CamelTestSupport;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +12,7 @@ public class MediaProviderOmdbInt extends CamelTestSupport {
     private final String apiKey = "a825746e";
     private MediaProviderOmdb movieProvider;
 
-    @Before
+    @BeforeEach
     public void initialize(){
         this.movieProvider = new MediaProviderOmdb(context, template, apiKey);
     }

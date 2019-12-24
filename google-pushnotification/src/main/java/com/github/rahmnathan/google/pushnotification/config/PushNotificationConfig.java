@@ -4,7 +4,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.http4.HttpMethods;
+import org.apache.camel.http.common.HttpMethods;
 import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class PushNotificationConfig {
                             .end();
 
                     from(GOOGLE_PUSH_NOTIFICATION_ROUTE)
-                            .hystrix()
+                            .circuitBreaker()
                                 .hystrixConfiguration()
                                     .executionTimeoutInMilliseconds(5000)
                                 .end()
@@ -48,7 +48,7 @@ public class PushNotificationConfig {
                                 .to("micrometer:timer:pushnotification-timer?action=start")
                                 .to("https://fcm.googleapis.com")
                                 .to("micrometer:timer:pushnotification-timer?action=stop")
-                            .endHystrix()
+                            .endCircuitBreaker()
                             .process(new PushNotificationResponseProcessor())
                             .end();
                 }

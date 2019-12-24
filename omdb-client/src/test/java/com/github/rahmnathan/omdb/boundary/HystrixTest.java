@@ -2,16 +2,16 @@ package com.github.rahmnathan.omdb.boundary;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.camel.test.junit5.CamelTestSupport;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HystrixTest extends CamelTestSupport {
     private final Logger logger = LoggerFactory.getLogger(HystrixTest.class);
 
-    @Before
+    @BeforeEach
     public void initialize() throws Exception {
         context.addRoutes(new RouteBuilder() {
             @Override
@@ -25,11 +25,11 @@ public class HystrixTest extends CamelTestSupport {
 
 //                from("timer://foo?period=200")
                 from("direct:test")
-                        .hystrix()
+                        .circuitBreaker()
                             .inheritErrorHandler(true)
                             .process(exchange -> System.out.println("Executing hystrix."))
                             .throwException(new IllegalArgumentException())
-                        .endHystrix()
+                        .endCircuitBreaker()
                         .onFallback()
                             .process(exchange -> System.out.println("Executing fallback."))
                         .end()
