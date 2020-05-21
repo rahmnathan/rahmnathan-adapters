@@ -10,11 +10,11 @@
     <packaging>pom</packaging>
 
     <properties>
-        <maven.compiler.source>13</maven.compiler.source>
-        <maven.compiler.target>13</maven.compiler.target>
+        <maven.compiler.source>14</maven.compiler.source>
+        <maven.compiler.target>14</maven.compiler.target>
 
-        <camel.version>3.2.0</camel.version>
-        <jackson.version>2.10.3</jackson.version>
+        <camel.version>3.3.0</camel.version>
+        <jackson.version>2.11.0</jackson.version>
     </properties>
 
     <modules>
@@ -100,7 +100,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>11</release>
+                    <release>14</release>
                 </configuration>
             </plugin>
         </plugins>
