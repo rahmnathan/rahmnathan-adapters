@@ -7,7 +7,7 @@ node {
 
     stage('Setup') {
         mvnHome = tool 'Maven'
-        jdk = tool name: 'Java 11'
+        jdk = tool name: 'Java 8'
         env.JAVA_HOME = "${jdk}"
 
         server = Artifactory.server 'Artifactory'
@@ -19,14 +19,14 @@ node {
         buildInfo = Artifactory.newBuildInfo()
     }
     stage('Checkout') {
-        git 'https://github.com/rahmnathan/rahmnathan-adapters.git'
+        git branch: 'java-8', url: 'https://github.com/rahmnathan/rahmnathan-adapters.git'
     }
     stage('Set Version') {
         PROJECT_VERSION = sh(
                 script: "'${mvnHome}/bin/mvn' help:evaluate -Dexpression=project.version -q -DforceStdout",
                 returnStdout: true
         ).trim()
-        env.NEW_VERSION = "${PROJECT_VERSION}.${BUILD_NUMBER}"
+        env.NEW_VERSION = "${PROJECT_VERSION}.${BUILD_NUMBER}.jdk8"
         sh "'${mvnHome}/bin/mvn' -DnewVersion='${NEW_VERSION}' versions:set"
     }
     stage('Tag') {
