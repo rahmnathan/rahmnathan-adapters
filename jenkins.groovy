@@ -1,10 +1,22 @@
 node {
     def mvnHome
     def jdk
+    def server
+    def buildInfo
+    def rtMaven
+
     stage('Setup') {
         mvnHome = tool 'Maven'
         jdk = tool name: 'Java 11'
         env.JAVA_HOME = "${jdk}"
+
+        server = Artifactory.server 'Artifactory'
+
+        rtMaven = Artifactory.newMavenBuild()
+        rtMaven.tool = 'Maven'
+        rtMaven.deployer releaseRepo: 'rahmnathan-libraries', snapshotRepo: 'rahmnathan-libraries', server: server
+
+        buildInfo = Artifactory.newBuildInfo()
     }
     stage('Checkout') {
         git 'https://github.com/rahmnathan/rahmnathan-adapters.git'
@@ -26,10 +38,13 @@ node {
             sh "'${mvnHome}/bin/mvn' -Dtag=${NEW_VERSION} scm:tag"
         }
     }
-    stage('Package') {
-        sh "'${mvnHome}/bin/mvn' clean install -DskipTests"
-    }
     stage('Test') {
-        sh "'${mvnHome}/bin/mvn' test"
+        sh "'${mvnHome}/bin/mvn' clean test"
+    }
+    stage('Package & Deploy') {
+        rtMaven.run pom: 'pom.xml', goals: 'clean install -DskipTests', buildInfo: buildInfo
+    }
+    stage ('Publish build info') {
+        server.publishBuildInfo buildInfo
     }
 }
