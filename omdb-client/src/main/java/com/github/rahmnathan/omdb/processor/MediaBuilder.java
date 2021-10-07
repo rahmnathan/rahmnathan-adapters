@@ -13,18 +13,13 @@ import java.util.Base64;
 
 import static com.github.rahmnathan.omdb.config.OmdbCamelRoutes.*;
 
-public class MediaBuilder implements Processor {
+public record MediaBuilder(MediaType mediaType) implements Processor {
     private static final String IMDB_RATING_FIELD = "imdbRating";
     private static final String META_SCORE_FIELD = "Metascore";
     private static final String ACTORS_FIELD = "Actors";
     private static final String GENRE_FIELD = "Genre";
     private static final String YEAR_FIELD = "Year";
     private static final String PLOT_FIELD = "Plot";
-    private final MediaType mediaType;
-
-    public MediaBuilder(MediaType mediaType) {
-        this.mediaType = mediaType;
-    }
 
     @Override
     public void process(Exchange exchange) throws MediaProviderException {
@@ -36,19 +31,19 @@ public class MediaBuilder implements Processor {
         mediaBuilder.title(exchange.getProperty(MEDIA_TITLE_PROPERTY, String.class));
         mediaBuilder.mediaType(mediaType);
 
-        if(mediaJson == null || mediaJson.get("Response").asText().equalsIgnoreCase("False")) {
+        if (mediaJson == null || mediaJson.get("Response").asText().equalsIgnoreCase("False")) {
             throw new MediaNotFoundException("Media not found.");
         }
 
         mapMovieInfo(mediaJson, mediaBuilder);
         mapMoviePoster(inMessage, mediaBuilder);
 
-        if(mediaType == MediaType.EPISODE || mediaType == MediaType.SEASON){
+        if (mediaType == MediaType.EPISODE || mediaType == MediaType.SEASON) {
             Integer number = exchange.getProperty(NUMBER_PROPERTY, Integer.class);
             mediaBuilder.number(number);
-            if(mediaJson.has("Title")){
+            if (mediaJson.has("Title")) {
                 mediaBuilder.title(mediaJson.get("Title").asText());
-            } else if(MediaType.EPISODE == mediaType) {
+            } else if (MediaType.EPISODE == mediaType) {
                 mediaBuilder.title("Episode " + number);
             } else {
                 mediaBuilder.title("Season " + number);

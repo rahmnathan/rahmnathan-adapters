@@ -36,8 +36,9 @@ public class PushNotificationConfig {
 
                     from(GOOGLE_PUSH_NOTIFICATION_ROUTE)
                             .circuitBreaker()
-                                .hystrixConfiguration()
-                                    .executionTimeoutInMilliseconds(5000)
+                                .resilience4jConfiguration()
+                                    .timeoutDuration(5000)
+                                    .timeoutEnabled(true)
                                 .end()
                                 .inheritErrorHandler(true)
                                 .marshal().json(JsonLibrary.Jackson)
