@@ -83,6 +83,8 @@ public class OmdbCamelRoutes {
                             .end()
                             .end();
 
+                    // kamel -n camel run HelloWorld.java --build-property quarkus.datasource.camel.db-kind=postgresql --config secret:localmovies-db -d mvn:io.quarkus:quarkus-jdbc-postgresql -d mvn:org.apache.camel:camel-solr:3.17.0
+
                     from("timer:java?period=10000")
                             .routeId("java")
                             .to("sql:select * from media")
@@ -95,6 +97,8 @@ public class OmdbCamelRoutes {
                             //        .to("hashicorp-vault:secretsEngine?host=vault.nathanrahm.com&operation=getSecret&secretPath=localmovies/localmovie-media-manager&token=s.IG7Wm6lx4DE40eOEMZyRM482")
                             .to("log:info")
                             .end()
+                            .setHeader("SolrOperation", constant("COMMIT"))
+                            .to("solrCloud://solr.solr.svc.cluster.local:8983/solr?username=admin&password=redacted&collection=movies&zkHost=solr-zookeeper.solr.svc.cluster.local:2181&zkChroot=/solr")
                             .end();
 
                 }
