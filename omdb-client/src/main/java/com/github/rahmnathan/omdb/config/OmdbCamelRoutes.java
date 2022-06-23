@@ -8,8 +8,12 @@ import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.http.base.HttpOperationFailedException;
 import org.apache.camel.http.common.HttpMethods;
+import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Map;
 
 public class OmdbCamelRoutes {
     private final Logger logger = LoggerFactory.getLogger(OmdbCamelRoutes.class.getName());
@@ -78,10 +82,33 @@ public class OmdbCamelRoutes {
                                     .to("micrometer:timer:omdb-poster-timer?action=stop")
                             .end()
                             .end();
+
+                    from("timer:java?period=10000")
+                            .routeId("java")
+                            .to("sql:select * from media")
+                            .setHeader("SolrOperation", constant("INSERT"))
+                            .process(exchange -> exchange.getMessage().setHeader("LIST_LENGTH", exchange.getMessage().getBody(List.class).size()))
+                            .process(exchange -> exchange.setProperty("QUERY_RESULT", exchange.getMessage().getBody(List.class)))
+                            .loop(header("LIST_LENGTH"))
+                            .process(exchange -> exchange.getMessage().setBody(buildDocument(exchange.getProperty("QUERY_RESULT", List.class), exchange.getProperty("CamelLoopIndex", Integer.class))))
+                            .to("solrCloud://solr.solr.svc.cluster.local:8983/solr?username=admin&password=redacted&collection=movies&zkHost=solr-zookeeper.solr.svc.cluster.local:2181&zkChroot=/solr")
+                            //        .to("hashicorp-vault:secretsEngine?host=vault.nathanrahm.com&operation=getSecret&secretPath=localmovies/localmovie-media-manager&token=s.IG7Wm6lx4DE40eOEMZyRM482")
+                            .to("log:info")
+                            .end()
+                            .end();
+
                 }
             });
         } catch (Exception e){
             logger.error("Failure adding routes to Camel context", e);
         }
     }
+
+    public SolrInputDocument buildDocument(List<Map<String, Object>> queryResult, Integer index) {
+        SolrInputDocument inputDocument = new SolrInputDocument();
+        Map<String, Object> entry = queryResult.get(index);
+        entry.entrySet().stream().forEach(thisOne -> inputDocument.setField(thisOne.getKey(), String.valueOf(thisOne.getValue())));
+        return inputDocument;
+    }
+
 }
