@@ -6,7 +6,7 @@ import com.github.rahmnathan.omdb.config.OmdbCamelRoutes;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.http.common.HttpOperationFailedException;
+import org.apache.camel.http.base.HttpOperationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +87,7 @@ public class MediaProviderOmdb implements MediaProvider {
             throw new MediaProviderException("Received null response from omdb for title: " + title, httpException);
         }
 
-        Media media = exchange.getOut().getBody(Media.class);
+        Media media = exchange.getMessage().getBody(Media.class);
 
         if(media == null){
             throw new MediaProviderException("Received null response from omdb for title: " + title);
