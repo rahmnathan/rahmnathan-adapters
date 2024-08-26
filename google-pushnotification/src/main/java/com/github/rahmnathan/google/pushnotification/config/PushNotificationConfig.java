@@ -62,7 +62,7 @@ public class PushNotificationConfig {
     private String buildAuthorizationHeader() {
         try {
             GoogleCredential googleCredential = GoogleCredential
-                    .fromStream(new FileInputStream("/workspace/secrets/localmovie-firebase-key.json"))
+                    .fromStream(new FileInputStream("/workspace/secrets/google-services.json"))
                     .createScoped(Collections.singleton("https://www.googleapis.com/auth/firebase.messaging"));
 
             googleCredential.refreshToken();
