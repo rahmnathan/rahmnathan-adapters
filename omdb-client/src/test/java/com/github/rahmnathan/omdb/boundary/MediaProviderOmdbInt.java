@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class MediaProviderOmdbInt extends CamelTestSupport {
     private final Logger logger = LoggerFactory.getLogger(MediaProviderOmdbInt.class);
-    private final String apiKey = "a825746e";
+    private final String apiKey = "key";
     private MediaProviderOmdb movieProvider;
 
     @BeforeEach
@@ -25,8 +25,8 @@ public class MediaProviderOmdbInt extends CamelTestSupport {
     }
 
     @Test
-    public void getSeasonInt() throws Exception {
-        Media media = movieProvider.getSeason("Black Mirror", 1);
+    public void getSeriesInt() throws Exception {
+        Media media = movieProvider.getSeries("Black Mirror");
 
         logger.info("Response Media: {}", media);
     }

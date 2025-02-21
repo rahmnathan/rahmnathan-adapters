@@ -30,8 +30,9 @@ public class MediaProviderOmdb implements MediaProvider {
         Exchange responseExchange = template.request(OmdbCamelRoutes.OMDB_MOVIE_ROUTE, exchange -> {
             exchange.setProperty(OmdbCamelRoutes.MEDIA_TITLE_PROPERTY, title);
             exchange.getIn().setHeader(Exchange.HTTP_QUERY,
-                    "t=" + URLEncoder.encode(title, StandardCharsets.UTF_8.name()) +
-                            "&apikey=" + apiKey);
+                    "t=" + URLEncoder.encode(title, StandardCharsets.UTF_8) +
+                            "&apikey=" + apiKey+
+                            "&type=movie");
         });
 
         Media media = parseResponse(responseExchange, title);
@@ -40,20 +41,20 @@ public class MediaProviderOmdb implements MediaProvider {
         return media;
     }
 
-    public Media getSeason(String seriesTitle, Integer seasonNumber) throws MediaProviderException {
-        logger.debug("Received request for season. Series: {} season number: {}", seriesTitle, seasonNumber);
+    public Media getSeries(String title) throws MediaProviderException {
+        logger.debug("Received request for series: {}", title);
 
         Exchange responseExchange = template.request(OmdbCamelRoutes.OMDB_SEASON_ROUTE, exchange -> {
-            exchange.setProperty(OmdbCamelRoutes.MEDIA_TITLE_PROPERTY, seriesTitle);
-            exchange.setProperty(OmdbCamelRoutes.NUMBER_PROPERTY, seasonNumber);
+            exchange.setProperty(OmdbCamelRoutes.MEDIA_TITLE_PROPERTY, title);
             exchange.getIn().setHeader(Exchange.HTTP_QUERY,
-                    "t=" + URLEncoder.encode(seriesTitle, StandardCharsets.UTF_8.name()) +
-                            "&apikey=" + apiKey);
+                    "t=" + URLEncoder.encode(title, StandardCharsets.UTF_8) +
+                            "&apikey=" + apiKey +
+                            "&type=series");
         });
 
-        Media media = parseResponse(responseExchange, seriesTitle);
+        Media media = parseResponse(responseExchange, title);
 
-        logger.debug("Season response: {}", media);
+        logger.debug("Series response: {}", media);
         return media;
     }
 
@@ -64,10 +65,11 @@ public class MediaProviderOmdb implements MediaProvider {
             exchange.setProperty(OmdbCamelRoutes.MEDIA_TITLE_PROPERTY, seriesTitle);
             exchange.setProperty(OmdbCamelRoutes.NUMBER_PROPERTY, episodeNumber);
             exchange.getIn().setHeader(Exchange.HTTP_QUERY,
-                    "t=" + URLEncoder.encode(seriesTitle, StandardCharsets.UTF_8.name()) +
+                    "t=" + URLEncoder.encode(seriesTitle, StandardCharsets.UTF_8) +
                             "&Season=" + seasonNumber +
                             "&Episode=" + episodeNumber +
-                            "&apikey=" + apiKey);
+                            "&apikey=" + apiKey +
+                            "&type=episode");
         });
 
         Media media = parseResponse(responseExchange, seriesTitle);

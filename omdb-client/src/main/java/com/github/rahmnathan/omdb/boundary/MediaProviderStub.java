@@ -10,8 +10,8 @@ public class MediaProviderStub implements MediaProvider {
     }
 
     @Override
-    public Media getSeason(String seriesTitle, Integer seasonNumber) {
-        return Media.builder().title(seriesTitle).number(seasonNumber).build();
+    public Media getSeries(String seriesTitle) {
+        return Media.builder().title(seriesTitle).build();
     }
 
     @Override
