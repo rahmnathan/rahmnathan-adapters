@@ -38,7 +38,7 @@ public record MediaBuilder(MediaType mediaType) implements Processor {
         mapMovieInfo(mediaJson, mediaBuilder);
         mapMoviePoster(inMessage, mediaBuilder);
 
-        if (mediaType == MediaType.EPISODE || mediaType == MediaType.SEASON) {
+        if (mediaType == MediaType.EPISODE || mediaType == MediaType.SERIES) {
             Integer number = exchange.getProperty(NUMBER_PROPERTY, Integer.class);
             mediaBuilder.number(number);
             if (mediaJson.has("Title")) {

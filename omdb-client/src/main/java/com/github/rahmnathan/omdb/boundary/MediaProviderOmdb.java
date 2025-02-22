@@ -44,7 +44,7 @@ public class MediaProviderOmdb implements MediaProvider {
     public Media getSeries(String title) throws MediaProviderException {
         logger.debug("Received request for series: {}", title);
 
-        Exchange responseExchange = template.request(OmdbCamelRoutes.OMDB_SEASON_ROUTE, exchange -> {
+        Exchange responseExchange = template.request(OmdbCamelRoutes.OMDB_SERIES_ROUTE, exchange -> {
             exchange.setProperty(OmdbCamelRoutes.MEDIA_TITLE_PROPERTY, title);
             exchange.getIn().setHeader(Exchange.HTTP_QUERY,
                     "t=" + URLEncoder.encode(title, StandardCharsets.UTF_8) +

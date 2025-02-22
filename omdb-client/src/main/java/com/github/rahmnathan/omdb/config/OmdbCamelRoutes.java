@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class OmdbCamelRoutes {
     private final Logger logger = LoggerFactory.getLogger(OmdbCamelRoutes.class.getName());
     public static final String OMDB_MOVIE_ROUTE = "direct:omdbMovie";
-    public static final String OMDB_SEASON_ROUTE = "direct:omdbSeason";
+    public static final String OMDB_SERIES_ROUTE = "direct:omdbSeries";
     public static final String OMDB_EPISODE_ROUTE = "direct:omdbEpisode";
     public static final String OMDB_BASE_ROUTE = "direct:omdbBase";
 
@@ -42,9 +42,9 @@ public class OmdbCamelRoutes {
                             .maximumRedeliveries(3)
                             .end();
 
-                    from(OMDB_SEASON_ROUTE)
+                    from(OMDB_SERIES_ROUTE)
                             .to(OMDB_BASE_ROUTE)
-                            .process(new MediaBuilder(MediaType.SEASON))
+                            .process(new MediaBuilder(MediaType.SERIES))
                             .end();
 
                     from(OMDB_EPISODE_ROUTE)
