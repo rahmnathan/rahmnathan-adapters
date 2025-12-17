@@ -6,7 +6,7 @@
 
     <groupId>com.github.rahmnathan.adapters</groupId>
     <artifactId>rahmnathan-adapters</artifactId>
-    <version>5</version>
+    <version>6</version>
     <packaging>pom</packaging>
 
     <scm>

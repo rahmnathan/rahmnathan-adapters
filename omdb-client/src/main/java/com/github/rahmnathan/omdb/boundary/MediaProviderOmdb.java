@@ -25,13 +25,19 @@ public class MediaProviderOmdb implements MediaProvider {
     }
 
     public Media getMovie(String title) throws MediaProviderException {
+        return getMovie(title, null);
+    }
+
+    public Media getMovie(String title, String year) throws MediaProviderException {
         logger.debug("Request for media: {}", title);
 
         Exchange responseExchange = template.request(OmdbCamelRoutes.OMDB_MOVIE_ROUTE, exchange -> {
             exchange.setProperty(OmdbCamelRoutes.MEDIA_TITLE_PROPERTY, title);
+            exchange.setProperty(OmdbCamelRoutes.MEDIA_YEAR_PROPERTY, year);
             exchange.getIn().setHeader(Exchange.HTTP_QUERY,
                     "t=" + URLEncoder.encode(title, StandardCharsets.UTF_8) +
-                            "&apikey=" + apiKey+
+                            (year == null || year.isBlank() ? "" : "&y=" + URLEncoder.encode(year, StandardCharsets.UTF_8)) +
+                            "&apikey=" + apiKey +
                             "&type=movie");
         });
 
@@ -42,12 +48,18 @@ public class MediaProviderOmdb implements MediaProvider {
     }
 
     public Media getSeries(String title) throws MediaProviderException {
+        return getSeries(title, null);
+    }
+
+    public Media getSeries(String title, String year) throws MediaProviderException {
         logger.debug("Received request for series: {}", title);
 
         Exchange responseExchange = template.request(OmdbCamelRoutes.OMDB_SERIES_ROUTE, exchange -> {
             exchange.setProperty(OmdbCamelRoutes.MEDIA_TITLE_PROPERTY, title);
+            exchange.setProperty(OmdbCamelRoutes.MEDIA_YEAR_PROPERTY, year);
             exchange.getIn().setHeader(Exchange.HTTP_QUERY,
                     "t=" + URLEncoder.encode(title, StandardCharsets.UTF_8) +
+                            (year == null || year.isBlank() ? "" : "&y=" + URLEncoder.encode(year, StandardCharsets.UTF_8)) +
                             "&apikey=" + apiKey +
                             "&type=series");
         });

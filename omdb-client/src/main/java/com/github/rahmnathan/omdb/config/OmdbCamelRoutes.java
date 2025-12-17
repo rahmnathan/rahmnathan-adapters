@@ -19,7 +19,8 @@ public class OmdbCamelRoutes {
     public static final String OMDB_BASE_ROUTE = "direct:omdbBase";
 
     private static final String OMDB_URL = "https://www.omdbapi.com";
-    public static final String MEDIA_TITLE_PROPERTY = "movieTitle";
+    public static final String MEDIA_TITLE_PROPERTY = "mediaTitle";
+    public static final String MEDIA_YEAR_PROPERTY = "mediaYear";
     public static final String OMDB_DATA_PROPERTY = "omdbData";
     public static final String NUMBER_PROPERTY = "numberProperty";
     private final CamelContext camelContext;
