@@ -15,6 +15,16 @@ public class MediaProviderStub implements MediaProvider {
     }
 
     @Override
+    public Media getMovie(String title, String year) {
+        return Media.builder().title(title).build();
+    }
+
+    @Override
+    public Media getSeries(String seriesTitle, String year) {
+        return Media.builder().title(seriesTitle).build();
+    }
+
+    @Override
     public Media getEpisode(String seriesTitle, Integer seasonNumber, Integer episodeNumber) {
         return Media.builder().title(seriesTitle).number(episodeNumber).build();
     }
